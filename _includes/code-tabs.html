@@ -1,0 +1,41 @@
+{%- comment -%}
+  Tabbed code-example component: C++ next to Rust, for the chapters that
+  carry a Rust lane (exactly Ch5, Ch6, Ch9 in v1; no other chapter uses this).
+
+  Usage:
+      {% capture cpp_code %}
+      ```cpp
+      // ...
+      ```
+      {% endcapture %}
+      {% capture rust_code %}
+      ```rust
+      // ...
+      ```
+      {% endcapture %}
+      {% include code-tabs.html id="spsc-ring" cpp=cpp_code rust=rust_code %}
+
+  Required: id (unique per instance on the page; used only for the radio
+  `name` group, not for CSS, so duplicates across pages are fine).
+  Optional: cpp_label (default "C++23"), rust_label (default "Rust").
+
+  Pure CSS tabs (radio input + label, `:checked` sibling selectors); the
+  panel that is showing still works with JavaScript disabled.
+{%- endcomment -%}
+
+<div class="code-tabs">
+  <input type="radio" name="code-tabs-{{ include.id }}" id="code-tabs-{{ include.id }}-cpp" class="code-tabs__radio" checked>
+  <input type="radio" name="code-tabs-{{ include.id }}" id="code-tabs-{{ include.id }}-rust" class="code-tabs__radio">
+
+  <div class="code-tabs__bar" role="tablist">
+    <label class="code-tabs__tab code-tabs__tab--cpp" for="code-tabs-{{ include.id }}-cpp">{{ include.cpp_label | default: "C++23" }}</label>
+    <label class="code-tabs__tab code-tabs__tab--rust" for="code-tabs-{{ include.id }}-rust">{{ include.rust_label | default: "Rust" }}</label>
+  </div>
+
+  <div class="code-tabs__panel code-tabs__panel--cpp">
+    {{ include.cpp | markdownify }}
+  </div>
+  <div class="code-tabs__panel code-tabs__panel--rust">
+    {{ include.rust | markdownify }}
+  </div>
+</div>

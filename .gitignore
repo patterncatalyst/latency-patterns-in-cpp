@@ -1,0 +1,45 @@
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Ruby / Bundler
+vendor/
+.bundle/
+Gemfile.lock
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# CMake / C++ build
+build/
+build-*/
+out/
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+
+# C++ toolchain (user-space Clang/LLVM, CMake, Ninja; see scripts/bootstrap-toolchain.sh)
+.toolchain/
+
+# Conan
+.conan/
+conan.lock
+CMakeUserPresets.json
+
+# Caches
+.cache/
+**/.cache/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Results that may carry host-specific artifacts before scrubbing
+examples/**/results/.raw/

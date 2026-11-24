@@ -1,0 +1,16 @@
+# Test code inherits the project .clang-tidy and relaxes checks that fight
+# GoogleTest idioms. The library under src/ still gets all of them.
+#
+# cppcoreguidelines-non-private-member-variables-in-classes: a GoogleTest
+#   fixture exposes its state as protected members so TEST_F bodies, which
+#   derive from the fixture, can reach it. That is the framework's own idiom.
+# readability-function-cognitive-complexity: EXPECT_*/ASSERT_* expand into a
+#   nested if/else, so a single assertion inside a for loop already looks
+#   like three or four levels of nesting to the metric. A loop asserting the
+#   same property over every element of a result (a histogram's buckets, an
+#   eCDF's points) is simple to read and the right way to write the test;
+#   the metric is miscounting macro expansion, not real complexity.
+InheritParentConfig: true
+Checks: >
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -readability-function-cognitive-complexity
