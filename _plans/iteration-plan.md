@@ -49,3 +49,26 @@ prose ownership sidebar only, no code.
 No other chapter carries a Rust lane. A lane in Ch0 through Ch4 (other than
 Ch4's sidebar), Ch7, Ch8, Ch10, or Ch11 would be noise: host tuning and the
 catalog index carry no ownership lesson to teach.
+
+## r01 housekeeping from the r00 validation pass
+
+The r00 scaffold passed validation with no blocking findings. Fold these
+low-severity items into r01 before the work they touch:
+
+- **CMake preset toolchain (do before any asan-only build).** The `asan-ubsan`,
+  `tsan`, and `release` presets inherit `toolchainFile` from `conan-base`
+  pointing at `build/conan_toolchain.cmake`. They build when the `default` lane
+  ran first, but a fresh checkout that configures only `asan-ubsan` has no
+  `build/` conan install and fails. Give each lane its own `conan install -of
+  <dir>` plus a per-lane `toolchainFile`, or document a single required
+  `conan install -of build` before any preset.
+- **Chapter numbering versus reading order.** `_docs/00-outline.md` groups
+  Ch9 (asynchronous) under the concurrency part while Ch7 and Ch8 sit under the
+  scaling part, so prev/next nav reads 5, 6, 9, 7, 8, 10. Settle number versus
+  order before chapters ship.
+- **LatencyRecorder::percentile() sorts per call** (`examples/_lib/src/
+  latency_recorder.cpp`): computing p50/p99/p99.9 sorts three times. Harmless
+  at current sample sizes; cache a sorted view if it shows up in a probe.
+- **CLAUDE.md voice-scanner false positive (cosmetic).** The voice scanner
+  flags CLAUDE.md's own list of banned reassurance words. No prose fix; add a
+  scanner ignore for CLAUDE.md if the noise is bothersome.
