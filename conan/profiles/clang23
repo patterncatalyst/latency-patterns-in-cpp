@@ -1,0 +1,27 @@
+# Project-local Conan profile. Pins the compiler settings to the user-space
+# Clang/LLVM 23.1.6 toolchain in .toolchain/llvm-23.1.6 (see
+# scripts/bootstrap-toolchain.sh and versions.env), never the Fedora-packaged
+# clang on PATH.
+#
+# This repo does not touch the shared `~/.conan2/profiles/default` profile
+# (that file is not ours to overwrite; other projects on this machine may
+# depend on it). Pass this profile explicitly:
+#
+#   . scripts/toolchain-env.sh   # exports CC/CXX pointing at .toolchain/
+#   conan install . -pr:a conan/profiles/clang23 --build=missing -of build -s build_type=Debug
+#
+# CC/CXX come from the environment (set by toolchain-env.sh, resolved at run
+# time from the script's own location) rather than a path written into this
+# file, so this profile never embeds the development machine's home path.
+[settings]
+arch=x86_64
+build_type=Debug
+compiler=clang
+compiler.version=23
+compiler.cppstd=23
+compiler.libcxx=libstdc++11
+os=Linux
+
+[conf]
+tools.build:compiler_executables={"c": "{{ os.getenv("CC") }}", "cpp": "{{ os.getenv("CXX") }}"}
+
