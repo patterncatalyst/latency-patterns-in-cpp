@@ -1,0 +1,79 @@
+# Chapter 1 loaded-distribution run: scan-to-divert under a real
+# per-parcel decode workload plus a periodic stall. naive = no
+# coordinated-omission correction; corrected = Gil Tene's backfill
+# turned on. Both are computed by replaying the same raw sample
+# sequence into two recorders (see ch01::build_naive_and_corrected).
+profile_label=ch01-loaded
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+belt_speed_m_per_s=2
+scan_to_diverter_distance_m=1.5
+parcels_per_second=2000
+parcel_count=5000
+stall_every_n_parcels=250
+stall_duration_ms=8
+scan_to_divert_deadline_us=750000.000
+raw_sample_count=5000
+# naive: the measurement a generator that waits for each parcel to
+# finish before starting the next would report. mean_us is the
+# naive arithmetic mean, included ONLY to show it next to the
+# percentiles computed from the same samples; it is not a reported
+# scan-to-divert result anywhere else in this guide.
+naive_sample_count=5000
+naive_mean_us=33.373
+naive_p50_us=1.085
+naive_p99_us=3.204
+naive_p999_us=8060.819
+# corrected: the same raw samples, replayed with the belt's own
+# arrival interval (1 / parcels_per_second) so a stall backfills
+# the arrivals it implies were waiting behind it.
+corrected_sample_count=5320
+corrected_p50_us=1.086
+corrected_p99_us=7058.704
+corrected_p999_us=8059.900
+# naive histogram (bucket range in microseconds, count, bar)
+     0.854 us -    404.345 us | ######################################## 4980
+   404.345 us -    807.835 us |  0
+   807.835 us -   1211.326 us |  0
+  1211.326 us -   1614.816 us |  0
+  1614.816 us -   2018.307 us |  0
+  2018.307 us -   2421.798 us |  0
+  2421.798 us -   2825.288 us |  0
+  2825.288 us -   3228.779 us |  0
+  3228.779 us -   3632.269 us |  0
+  3632.269 us -   4035.760 us |  0
+  4035.760 us -   4439.251 us |  0
+  4439.251 us -   4842.741 us |  0
+  4842.741 us -   5246.232 us |  0
+  5246.232 us -   5649.722 us |  0
+  5649.722 us -   6053.213 us |  0
+  6053.213 us -   6456.704 us |  0
+  6456.704 us -   6860.194 us |  0
+  6860.194 us -   7263.685 us |  0
+  7263.685 us -   7667.175 us |  0
+  7667.175 us -   8070.666 us |  20
+# corrected histogram (bucket range in microseconds, count, bar)
+     0.854 us -    404.345 us | ######################################## 5000
+   404.345 us -    807.835 us |  20
+   807.835 us -   1211.326 us |  20
+  1211.326 us -   1614.816 us |  20
+  1614.816 us -   2018.307 us |  0
+  2018.307 us -   2421.798 us |  20
+  2421.798 us -   2825.288 us |  20
+  2825.288 us -   3228.779 us |  20
+  3228.779 us -   3632.269 us |  20
+  3632.269 us -   4035.760 us |  0
+  4035.760 us -   4439.251 us |  20
+  4439.251 us -   4842.741 us |  20
+  4842.741 us -   5246.232 us |  20
+  5246.232 us -   5649.722 us |  20
+  5649.722 us -   6053.213 us |  0
+  6053.213 us -   6456.704 us |  20
+  6456.704 us -   6860.194 us |  20
+  6860.194 us -   7263.685 us |  20
+  7263.685 us -   7667.175 us |  20
+  7667.175 us -   8070.666 us |  20

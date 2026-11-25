@@ -15,3 +15,4 @@ chapters ship in.
 | Example | What it shows | Chapter |
 |---|---|---|
 | [`00-running-example`](https://github.com/{{ site.github_username }}/{{ site.github_repo }}/tree/main/examples/00-running-example) | The parcel sortation line and the measurement harness; the uncorrected scan-to-divert baseline every later chapter compares against | [The running example and the harness]({{ '/docs/00-running-example-and-harness/' | relative_url }}) |
+| [`01-latency-as-a-distribution`](https://github.com/{{ site.github_username }}/{{ site.github_repo }}/tree/main/examples/01-latency-as-a-distribution) | A loaded scan stage (real decode cost plus a periodic stall); the same run measured naively and with coordinated-omission correction, mean shown next to the percentiles | [Latency as a distribution]({{ '/docs/01-latency-as-a-distribution/' | relative_url }}) |
