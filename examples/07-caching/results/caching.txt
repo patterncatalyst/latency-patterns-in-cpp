@@ -1,0 +1,283 @@
+# Chapter 7 caching run: one Zipf-skewed barcode-to-route access
+# trace run uncached, then through LRU/LFU/FIFO/SIEVE caches in
+# front of the SAME slow RouteResolver (see ch07::RouteResolver);
+# a second trace through TtlLruCache at two TTL windows across a
+# simulated reroute; a third trace through a memoized pure
+# dimension classifier versus calling it directly.
+# mismatch_count/stale_serve_count are this chapter's behavioral
+# checks: a plain eviction-policy lane must read 0 mismatches
+# (the backing table never changes during that lane's run), and
+# a TTL lane's stale_serve_count is the staleness this chapter is
+# measuring, not a bug.
+profile_label=ch07-caching
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+key_space=2048
+cache_capacity=128
+zipf_skew=1.1
+trace_length=50000
+uncached_hit_count=0
+uncached_miss_count=50000
+uncached_hit_ratio=0.0000
+uncached_mismatch_count=0
+uncached_sample_count=50000
+uncached_p50_us=1.947
+uncached_p99_us=4.185
+uncached_p999_us=7.141
+# uncached histogram (bucket range in microseconds, count, bar)
+     0.021 us -      1.068 us | ###################### 11610
+     1.068 us -      2.115 us | ############################ 15078
+     2.115 us -      3.161 us | ######################################## 21008
+     3.161 us -      4.208 us | ### 1809
+     4.208 us -      5.255 us |  216
+     5.255 us -      6.302 us |  167
+     6.302 us -      7.348 us |  96
+     7.348 us -      8.395 us |  12
+     8.395 us -      9.442 us |  0
+     9.442 us -     10.489 us |  0
+    10.489 us -     11.535 us |  0
+    11.535 us -     12.582 us |  0
+    12.582 us -     13.629 us |  1
+    13.629 us -     14.676 us |  1
+    14.676 us -     15.722 us |  1
+    15.722 us -     16.769 us |  0
+    16.769 us -     17.816 us |  0
+    17.816 us -     18.863 us |  0
+    18.863 us -     19.909 us |  0
+    19.909 us -     20.956 us |  1
+lru_hit_count=32399
+lru_miss_count=17601
+lru_hit_ratio=0.6480
+lru_mismatch_count=0
+lru_sample_count=50000
+lru_p50_us=0.090
+lru_p99_us=3.587
+lru_p999_us=5.401
+# lru histogram (bucket range in microseconds, count, bar)
+     0.053 us -      0.573 us | ######################################## 33716
+     0.573 us -      1.093 us | ### 2545
+     1.093 us -      1.613 us | ### 2777
+     1.613 us -      2.133 us | ### 2701
+     2.133 us -      2.653 us | ### 2810
+     2.653 us -      3.172 us | ### 2602
+     3.172 us -      3.692 us | ### 2573
+     3.692 us -      4.212 us |  136
+     4.212 us -      4.732 us |  54
+     4.732 us -      5.252 us |  26
+     5.252 us -      5.772 us |  26
+     5.772 us -      6.292 us |  16
+     6.292 us -      6.812 us |  10
+     6.812 us -      7.332 us |  5
+     7.332 us -      7.852 us |  0
+     7.852 us -      8.371 us |  1
+     8.371 us -      8.891 us |  0
+     8.891 us -      9.411 us |  1
+     9.411 us -      9.931 us |  0
+     9.931 us -     10.451 us |  1
+lfu_hit_count=35932
+lfu_miss_count=14068
+lfu_hit_ratio=0.7186
+lfu_mismatch_count=0
+lfu_sample_count=50000
+lfu_p50_us=0.328
+lfu_p99_us=3.837
+lfu_p999_us=4.921
+# lfu histogram (bucket range in microseconds, count, bar)
+     0.219 us -      2.318 us | ######################################## 43178
+     2.318 us -      4.418 us | ###### 6726
+     4.418 us -      6.517 us |  89
+     6.517 us -      8.616 us |  3
+     8.616 us -     10.716 us |  1
+    10.716 us -     12.815 us |  1
+    12.815 us -     14.914 us |  0
+    14.914 us -     17.014 us |  0
+    17.014 us -     19.113 us |  0
+    19.113 us -     21.212 us |  1
+    21.213 us -     23.312 us |  0
+    23.312 us -     25.411 us |  0
+    25.411 us -     27.511 us |  0
+    27.511 us -     29.610 us |  0
+    29.610 us -     31.709 us |  0
+    31.709 us -     33.809 us |  0
+    33.809 us -     35.908 us |  0
+    35.908 us -     38.007 us |  0
+    38.007 us -     40.107 us |  0
+    40.107 us -     42.206 us |  1
+fifo_hit_count=29712
+fifo_miss_count=20288
+fifo_hit_ratio=0.5942
+fifo_mismatch_count=0
+fifo_sample_count=50000
+fifo_p50_us=0.073
+fifo_p99_us=4.648
+fifo_p999_us=9.545
+# fifo histogram (bucket range in microseconds, count, bar)
+     0.040 us -      4.706 us | ######################################## 49516
+     4.706 us -      9.372 us |  430
+     9.372 us -     14.038 us |  47
+    14.038 us -     18.704 us |  3
+    18.704 us -     23.370 us |  1
+    23.370 us -     28.036 us |  1
+    28.036 us -     32.702 us |  0
+    32.702 us -     37.368 us |  0
+    37.368 us -     42.034 us |  0
+    42.034 us -     46.700 us |  0
+    46.700 us -     51.366 us |  0
+    51.366 us -     56.032 us |  0
+    56.032 us -     60.698 us |  0
+    60.698 us -     65.364 us |  0
+    65.364 us -     70.030 us |  0
+    70.030 us -     74.696 us |  0
+    74.696 us -     79.362 us |  0
+    79.362 us -     84.028 us |  0
+    84.028 us -     88.694 us |  1
+    88.694 us -     93.360 us |  1
+sieve_hit_count=36337
+sieve_miss_count=13663
+sieve_hit_ratio=0.7267
+sieve_mismatch_count=0
+sieve_sample_count=50000
+sieve_p50_us=0.055
+sieve_p99_us=3.583
+sieve_p999_us=5.365
+# sieve histogram (bucket range in microseconds, count, bar)
+     0.045 us -      1.027 us | ######################################## 39173
+     1.027 us -      2.010 us | #### 3934
+     2.010 us -      2.992 us | #### 4030
+     2.992 us -      3.974 us | ## 2669
+     3.974 us -      4.957 us |  121
+     4.957 us -      5.939 us |  50
+     5.939 us -      6.921 us |  15
+     6.921 us -      7.904 us |  6
+     7.904 us -      8.886 us |  1
+     8.886 us -      9.868 us |  0
+     9.869 us -     10.851 us |  0
+    10.851 us -     11.833 us |  0
+    11.833 us -     12.816 us |  0
+    12.816 us -     13.798 us |  0
+    13.798 us -     14.780 us |  0
+    14.780 us -     15.763 us |  0
+    15.763 us -     16.745 us |  0
+    16.745 us -     17.727 us |  0
+    17.727 us -     18.710 us |  0
+    18.710 us -     19.692 us |  1
+reroute_at_index=25000
+reroute_key_count=10
+ttl_short_ttl_ticks=2000
+ttl_short_hit_count=32323
+ttl_short_miss_count=17677
+ttl_short_hit_ratio=0.6465
+ttl_short_stale_serve_count=512
+ttl_short_sample_count=50000
+ttl_short_p50_us=0.112
+ttl_short_p99_us=5.262
+ttl_short_p999_us=8.362
+# ttl_short histogram (bucket range in microseconds, count, bar)
+     0.062 us -      5.100 us | ######################################## 49461
+     5.100 us -     10.139 us |  533
+    10.139 us -     15.177 us |  4
+    15.177 us -     20.216 us |  1
+    20.216 us -     25.254 us |  0
+    25.254 us -     30.292 us |  0
+    30.292 us -     35.331 us |  0
+    35.331 us -     40.369 us |  0
+    40.369 us -     45.408 us |  0
+    45.408 us -     50.446 us |  0
+    50.446 us -     55.484 us |  0
+    55.484 us -     60.523 us |  0
+    60.523 us -     65.561 us |  0
+    65.561 us -     70.600 us |  0
+    70.600 us -     75.638 us |  0
+    75.638 us -     80.676 us |  0
+    80.676 us -     85.715 us |  0
+    85.715 us -     90.753 us |  0
+    90.753 us -     95.792 us |  0
+    95.792 us -    100.830 us |  1
+ttl_long_ttl_ticks=1000000
+ttl_long_hit_count=32604
+ttl_long_miss_count=17396
+ttl_long_hit_ratio=0.6521
+ttl_long_stale_serve_count=9219
+ttl_long_sample_count=50000
+ttl_long_p50_us=0.102
+ttl_long_p99_us=3.584
+ttl_long_p999_us=4.626
+# ttl_long histogram (bucket range in microseconds, count, bar)
+     0.067 us -      0.579 us | ######################################## 34158
+     0.579 us -      1.092 us | ### 2674
+     1.092 us -      1.604 us | ## 2509
+     1.604 us -      2.116 us | ### 2641
+     2.116 us -      2.629 us | ### 2596
+     2.629 us -      3.141 us | ### 2764
+     3.141 us -      3.653 us | ## 2261
+     3.653 us -      4.166 us |  314
+     4.166 us -      4.678 us |  36
+     4.678 us -      5.191 us |  9
+     5.191 us -      5.703 us |  16
+     5.703 us -      6.215 us |  7
+     6.215 us -      6.728 us |  3
+     6.728 us -      7.240 us |  5
+     7.240 us -      7.752 us |  3
+     7.752 us -      8.265 us |  1
+     8.265 us -      8.777 us |  1
+     8.777 us -      9.289 us |  0
+     9.289 us -      9.802 us |  1
+     9.802 us -     10.314 us |  1
+dimension_direct_sample_count=50000
+dimension_direct_p50_us=0.293
+dimension_direct_p99_us=0.303
+dimension_direct_p999_us=0.330
+# dimension_direct histogram (bucket range in microseconds, count, bar)
+     0.286 us -      0.582 us | ######################################## 49975
+     0.582 us -      0.877 us |  6
+     0.877 us -      1.173 us |  2
+     1.173 us -      1.468 us |  0
+     1.468 us -      1.764 us |  2
+     1.764 us -      2.060 us |  0
+     2.060 us -      2.355 us |  1
+     2.355 us -      2.651 us |  3
+     2.651 us -      2.946 us |  1
+     2.946 us -      3.242 us |  5
+     3.242 us -      3.538 us |  2
+     3.538 us -      3.833 us |  0
+     3.833 us -      4.129 us |  1
+     4.129 us -      4.424 us |  0
+     4.424 us -      4.720 us |  0
+     4.720 us -      5.016 us |  1
+     5.016 us -      5.311 us |  0
+     5.311 us -      5.607 us |  0
+     5.607 us -      5.902 us |  0
+     5.902 us -      6.198 us |  1
+dimension_memo_hit_count=49976
+dimension_memo_miss_count=24
+dimension_memo_hit_ratio=0.9995
+dimension_memo_mismatch_count=0
+dimension_memo_sample_count=50000
+dimension_memo_p50_us=0.038
+dimension_memo_p99_us=0.052
+dimension_memo_p999_us=0.072
+# dimension_memo histogram (bucket range in microseconds, count, bar)
+     0.033 us -      0.253 us | ######################################## 49967
+     0.253 us -      0.473 us |  24
+     0.473 us -      0.693 us |  3
+     0.693 us -      0.913 us |  0
+     0.913 us -      1.133 us |  0
+     1.133 us -      1.354 us |  2
+     1.354 us -      1.574 us |  1
+     1.574 us -      1.794 us |  0
+     1.794 us -      2.014 us |  0
+     2.014 us -      2.234 us |  0
+     2.234 us -      2.454 us |  0
+     2.454 us -      2.674 us |  1
+     2.674 us -      2.894 us |  1
+     2.894 us -      3.114 us |  0
+     3.114 us -      3.334 us |  0
+     3.334 us -      3.555 us |  0
+     3.555 us -      3.775 us |  0
+     3.775 us -      3.995 us |  0
+     3.995 us -      4.215 us |  0
+     4.215 us -      4.435 us |  1
