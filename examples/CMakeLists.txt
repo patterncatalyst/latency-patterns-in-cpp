@@ -8,3 +8,4 @@ add_subdirectory(_lib)
 
 add_subdirectory(00-running-example/cpp)
 add_subdirectory(01-latency-as-a-distribution/cpp)
+add_subdirectory(02-latency-budget/cpp)
