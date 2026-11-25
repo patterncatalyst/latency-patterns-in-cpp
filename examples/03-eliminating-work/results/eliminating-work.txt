@@ -1,0 +1,72 @@
+# Chapter 3 eliminating-work run: the scan decode path measured
+# twice over the SAME seeded parcel sequence. before = per-parcel
+# heap allocation + std::unordered_map lookup + a from-scratch
+# zone-multiplier rebuild (see ch03::BeforeScanStage); after = a
+# precomputed std::array lookup, a hoisted zone-multiplier table,
+# and no per-parcel allocation (see ch03::AfterScanStage).
+# chute_mismatches is this run's behavioral check: both lanes see
+# the identical parcel sequence and must resolve the identical
+# chute for every one of them.
+profile_label=ch03-eliminating-work
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+belt_speed_m_per_s=2
+scan_to_diverter_distance_m=1.5
+parcel_count=5000
+scan_to_divert_deadline_us=750000.000
+compared_chute_count=5000
+chute_mismatches=0
+before_sample_count=5000
+before_p50_us=0.596
+before_p99_us=0.910
+before_p999_us=3.619
+# before histogram (bucket range in microseconds, count, bar)
+     0.326 us -      0.584 us | #################################### 2311
+     0.584 us -      0.842 us | ######################################## 2517
+     0.843 us -      1.101 us | ## 163
+     1.101 us -      1.359 us |  2
+     1.359 us -      1.617 us |  0
+     1.617 us -      1.875 us |  1
+     1.875 us -      2.134 us |  0
+     2.134 us -      2.392 us |  0
+     2.392 us -      2.650 us |  0
+     2.650 us -      2.908 us |  0
+     2.908 us -      3.167 us |  0
+     3.167 us -      3.425 us |  0
+     3.425 us -      3.683 us |  2
+     3.683 us -      3.941 us |  0
+     3.941 us -      4.200 us |  2
+     4.200 us -      4.458 us |  1
+     4.458 us -      4.716 us |  0
+     4.716 us -      4.974 us |  0
+     4.974 us -      5.233 us |  0
+     5.233 us -      5.491 us |  1
+after_sample_count=5000
+after_p50_us=0.116
+after_p99_us=0.189
+after_p999_us=0.254
+# after histogram (bucket range in microseconds, count, bar)
+     0.066 us -      0.370 us | ######################################## 4998
+     0.370 us -      0.674 us |  1
+     0.674 us -      0.979 us |  0
+     0.979 us -      1.283 us |  0
+     1.283 us -      1.587 us |  0
+     1.587 us -      1.891 us |  0
+     1.891 us -      2.196 us |  0
+     2.196 us -      2.500 us |  0
+     2.500 us -      2.804 us |  0
+     2.804 us -      3.108 us |  0
+     3.108 us -      3.413 us |  0
+     3.413 us -      3.717 us |  0
+     3.717 us -      4.021 us |  0
+     4.021 us -      4.325 us |  0
+     4.325 us -      4.630 us |  0
+     4.630 us -      4.934 us |  0
+     4.934 us -      5.238 us |  0
+     5.238 us -      5.542 us |  0
+     5.542 us -      5.847 us |  0
+     5.847 us -      6.151 us |  1
