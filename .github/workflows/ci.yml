@@ -37,12 +37,26 @@ jobs:
           bundler-cache: true
       - run: bundle exec jekyll build
 
+  # Toolchain probe only (see examples/_rust-probe/); the first real Rust
+  # lane lands with the wait-free synchronization chapter. Uses the
+  # GitHub-hosted runner's own rustup, which honors rust-toolchain.toml at
+  # the repo root; the repo-local hermetic toolchain from
+  # scripts/bootstrap-rust.sh is for the dev host, not CI.
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: rustup show
+      - run: cargo fmt --manifest-path examples/_rust-probe/Cargo.toml --check
+      - run: cargo clippy --manifest-path examples/_rust-probe/Cargo.toml -- -D warnings
+      - run: cargo test --manifest-path examples/_rust-probe/Cargo.toml
+
   # The one check the ruleset requires. Passes only when every job above
   # succeeded (none are conditionally skipped here, but the pattern matches
   # the lgtm-github summary-job skeleton so this stays droppable in place).
   ci-ok:
     if: always()
-    needs: [validate, shellcheck, jekyll-build]
+    needs: [validate, shellcheck, jekyll-build, rust]
     runs-on: ubuntu-latest
     steps:
       - env:

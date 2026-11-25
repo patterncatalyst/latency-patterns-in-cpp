@@ -23,12 +23,18 @@ CMakeCache.txt
 cmake-build-*/
 
 # C++ toolchain (user-space Clang/LLVM, CMake, Ninja; see scripts/bootstrap-toolchain.sh)
+# Also covers .toolchain/rust/, the repo-local rustup/cargo install from
+# scripts/bootstrap-rust.sh.
 .toolchain/
 
 # Conan
 .conan/
 conan.lock
 CMakeUserPresets.json
+
+# Cargo build output (examples/_rust-probe/ and later Rust-lane crates)
+target/
+**/target/
 
 # Caches
 .cache/

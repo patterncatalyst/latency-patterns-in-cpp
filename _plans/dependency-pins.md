@@ -45,11 +45,20 @@ the single-source-of-truth copy of every version below.
 | GoogleTest / GoogleMock | 1.18.0 | surveyed 2026-11-24, upstream latest stable; pinned in `conanfile.py`, Abseil pinned transitively |
 | spdlog | 1.17.0 | surveyed 2026-11-24, upstream latest stable; pinned in `conanfile.py` |
 
-## Rust toolchain (Ch5, Ch6, Ch9 only; TBD)
+## Rust toolchain (Ch5, Ch6, Ch9 only; filled by r03)
+
+User-space install only, under `.toolchain/rust/` (gitignored, covered by the
+existing `.toolchain/` pattern) with its own `RUSTUP_HOME` and `CARGO_HOME`,
+installed by `scripts/bootstrap-rust.sh`, never the host's own `~/.rustup` or
+`~/.cargo`: the Rust lane is never built with a toolchain this repo does not
+pin exactly. `eval "$(scripts/rust-env.sh)"` puts the pinned `rustc`/`cargo`
+first on `PATH` for a build. `rust-toolchain.toml` at the repo root carries
+the same pin so `rustup` auto-selects it, in CI as well as on the host. See
+`versions.env` for the single-source-of-truth copy of the version below.
 
 | Dependency | Pin | Reason to hold (if any) |
 |---|---|---|
-| rustc / cargo | TBD | |
+| rustc / cargo | 1.100.0 | surveyed 2026-11-25, upstream latest stable; user-space install via rustup, not the host's rustup/cargo |
 
 ## Per-chapter example dependencies
 
