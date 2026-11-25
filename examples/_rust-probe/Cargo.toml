@@ -1,0 +1,17 @@
+# _rust-probe - toolchain probe, not a chapter example.
+#
+# This crate exists only to exercise the hermetic, pinned Rust toolchain
+# (see rust-toolchain.toml, scripts/bootstrap-rust.sh, scripts/rust-env.sh)
+# and the CI wiring that gates on `cargo fmt`, `cargo clippy`, and
+# `cargo test` before the first real Rust lane (wait-free synchronization)
+# lands. Remove or replace it once that chapter's example ships.
+
+[package]
+name = "rust-probe"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "rust_probe"
+path = "src/lib.rs"

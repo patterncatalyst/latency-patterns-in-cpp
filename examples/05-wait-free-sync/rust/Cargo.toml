@@ -1,0 +1,22 @@
+# examples/05-wait-free-sync/rust - the chapter's Rust lane: the identical
+# wait-free SPSC handoff as cpp/include/ch05/spsc_ring_queue.hpp, in
+# idiomatic Rust (see rust-toolchain.toml, scripts/bootstrap-rust.sh,
+# scripts/rust-env.sh for the hermetic, pinned toolchain this builds
+# against; see CLAUDE.md, "The spine": Rust appears only in Ch5, Ch6, Ch9).
+#
+# No third-party dependencies: the lesson this crate exists to teach is in
+# std's ownership rules (Send/Sync, no Clone on Sender/Receiver), not in a
+# crate, so pulling one in would bury the point under someone else's API.
+[package]
+name = "wait-free-sync"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "ch05_wait_free_sync"
+path = "src/lib.rs"
+
+[[bin]]
+name = "handoff_bench"
+path = "src/bin/handoff_bench.rs"

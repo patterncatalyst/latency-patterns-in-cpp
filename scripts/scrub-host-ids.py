@@ -83,7 +83,15 @@ def build_table() -> list[Rule]:
         table.append(("hostname (fqdn)", False, hostname_fqdn, "<host>"))
     if hostname_short and hostname_short not in ("localhost", hostname_fqdn):
         table.append(("hostname (short)", True, rf"\b{re.escape(hostname_short)}\b", "<host>"))
-    if account:
+    # Generic and CI account names (for example the "runner" user on hosted
+    # CI) are not the developer identity this scrub protects, and matching a
+    # common word like "runner" false-positives on ordinary prose and workflow
+    # files. Skip those; a real dev-host login is still scanned.
+    generic_accounts = {
+        "runner", "runneradmin", "root", "ubuntu", "admin", "administrator",
+        "user", "build", "builder", "ci", "vsts", "circleci", "jenkins",
+    }
+    if account and account.lower() not in generic_accounts:
         # Whole-word match only, so the replacement never eats unrelated
         # substrings that happen to contain the account name.
         table.append(("account name", True, rf"\b{re.escape(account)}\b", "<account>"))

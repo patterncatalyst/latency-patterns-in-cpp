@@ -1,0 +1,11 @@
+# rust-toolchain.toml - the exact pinned stable Rust release this repo
+# builds its Rust lane against (Ch5, Ch6, Ch9; see CLAUDE.md, "Dependencies").
+# Pinned exactly, never a floating channel; see versions.env and
+# _plans/dependency-pins.md for the survey date and the full pin table.
+#
+# `rustup` reads this file automatically, both in scripts/bootstrap-rust.sh's
+# repo-local toolchain and in CI (the GitHub-hosted runner's own rustup).
+
+[toolchain]
+channel = "1.100.0"
+components = ["rustfmt", "clippy"]

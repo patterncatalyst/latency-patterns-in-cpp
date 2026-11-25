@@ -1,0 +1,125 @@
+# Chapter 4 zero-copy-layout run: two unrelated measured effects,
+# both about where bytes live rather than how many instructions
+# touch them.
+profile_label=ch04-zero-copy-layout
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+
+# --- lane 1: recent-scan ledger layout (AoS pointer-chasing vs SoA) ---
+parcel_count=5000
+ledger_window=256
+key_space=701
+compared_chute_count=5000
+chute_mismatches=0
+before_review_count=1525
+after_review_count=1525
+layout_before_sample_count=5000
+layout_before_p50_us=7.315
+layout_before_p99_us=12.626
+layout_before_p999_us=17.628
+# layout_before histogram (bucket range in microseconds, count, bar)
+     2.555 us -      4.847 us | ########## 749
+     4.847 us -      7.138 us | ############# 1033
+     7.138 us -      9.430 us | ######################################## 2993
+     9.430 us -     11.721 us | # 122
+    11.721 us -     14.013 us | # 89
+    14.013 us -     16.305 us |  8
+    16.305 us -     18.596 us |  2
+    18.596 us -     20.888 us |  0
+    20.888 us -     23.179 us |  3
+    23.179 us -     25.471 us |  0
+    25.471 us -     27.763 us |  0
+    27.763 us -     30.054 us |  0
+    30.054 us -     32.346 us |  0
+    32.346 us -     34.637 us |  0
+    34.637 us -     36.929 us |  0
+    36.929 us -     39.221 us |  0
+    39.221 us -     41.512 us |  0
+    41.512 us -     43.804 us |  0
+    43.804 us -     46.095 us |  0
+    46.095 us -     48.387 us |  1
+layout_after_sample_count=5000
+layout_after_p50_us=3.921
+layout_after_p99_us=4.890
+layout_after_p999_us=8.450
+# layout_after histogram (bucket range in microseconds, count, bar)
+     2.374 us -      2.829 us | #### 354
+     2.829 us -      3.283 us | ####### 579
+     3.283 us -      3.738 us | ###### 541
+     3.738 us -      4.193 us | ######################################## 3120
+     4.193 us -      4.647 us | #### 322
+     4.647 us -      5.102 us |  44
+     5.102 us -      5.557 us |  11
+     5.557 us -      6.012 us |  7
+     6.012 us -      6.466 us |  4
+     6.466 us -      6.921 us |  6
+     6.921 us -      7.376 us |  3
+     7.376 us -      7.830 us |  4
+     7.830 us -      8.285 us |  0
+     8.285 us -      8.740 us |  2
+     8.740 us -      9.194 us |  0
+     9.194 us -      9.649 us |  1
+     9.649 us -     10.104 us |  0
+    10.104 us -     10.559 us |  1
+    10.559 us -     11.013 us |  0
+    11.013 us -     11.468 us |  1
+
+# --- lane 2: false sharing between two per-thread counters ---
+false_sharing_trial_count=30
+false_sharing_iterations_per_thread=10000000
+unpadded_count_mismatches=0
+padded_count_mismatches=0
+unpadded_sample_count=30
+unpadded_p50_us=226580.106
+unpadded_p99_us=248378.183
+unpadded_p999_us=248378.183
+# unpadded histogram (bucket range in microseconds, count, bar)
+223742.425 us - 224974.213 us | ######################################## 9
+224974.213 us - 226206.001 us | ################# 4
+226206.001 us - 227437.789 us | ######## 2
+227437.789 us - 228669.577 us |  0
+228669.577 us - 229901.364 us | ######## 2
+229901.364 us - 231133.152 us | ######## 2
+231133.152 us - 232364.940 us | #### 1
+232364.940 us - 233596.728 us | #### 1
+233596.728 us - 234828.516 us | ############# 3
+234828.516 us - 236060.304 us | #### 1
+236060.304 us - 237292.092 us | #### 1
+237292.092 us - 238523.880 us |  0
+238523.880 us - 239755.668 us | #### 1
+239755.668 us - 240987.456 us |  0
+240987.456 us - 242219.244 us |  0
+242219.244 us - 243451.031 us | #### 1
+243451.031 us - 244682.819 us |  0
+244682.819 us - 245914.607 us |  0
+245914.607 us - 247146.395 us |  0
+247146.395 us - 248378.183 us | ######## 2
+padded_sample_count=30
+padded_p50_us=60631.084
+padded_p99_us=62787.861
+padded_p999_us=62787.861
+# padded histogram (bucket range in microseconds, count, bar)
+ 53644.098 us -  54101.286 us | ########## 3
+ 54101.286 us -  54558.474 us | ### 1
+ 54558.474 us -  55015.662 us | ### 1
+ 55015.662 us -  55472.851 us | ### 1
+ 55472.851 us -  55930.039 us |  0
+ 55930.039 us -  56387.227 us |  0
+ 56387.227 us -  56844.415 us |  0
+ 56844.415 us -  57301.603 us | ### 1
+ 57301.603 us -  57758.791 us |  0
+ 57758.791 us -  58215.980 us |  0
+ 58215.980 us -  58673.168 us |  0
+ 58673.168 us -  59130.356 us |  0
+ 59130.356 us -  59587.544 us |  0
+ 59587.544 us -  60044.732 us |  0
+ 60044.732 us -  60501.920 us | ########## 3
+ 60501.920 us -  60959.108 us | ######################################## 11
+ 60959.108 us -  61416.297 us | ########## 3
+ 61416.297 us -  61873.485 us | ### 1
+ 61873.485 us -  62330.673 us | ########## 3
+ 62330.673 us -  62787.861 us | ####### 2

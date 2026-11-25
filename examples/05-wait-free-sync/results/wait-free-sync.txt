@@ -1,0 +1,84 @@
+# Chapter 5 wait-free-sync run: the same scan-to-divert handoff,
+# measured once through ch05::MutexHandoffQueue (a mutex +
+# condition_variable around a std::queue) and once through
+# ch05::SpscRingQueue (a fixed-capacity, wait-free ring with
+# acquire/release ordered head/tail indices). Both lanes run the
+# identical item count with both threads flat out, no pacing.
+# *_dropped_count, *_out_of_order_count, and *_duplicate_count are
+# this run's behavioral check: every item sent exactly once must
+# arrive exactly once, in the order it was sent.
+profile_label=ch05-wait-free-sync
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+handoff_item_count=200000
+ring_capacity=4096
+
+# --- lane 1: mutex-guarded queue (condition_variable, blocking) ---
+handoff_mutex_items_sent=200000
+handoff_mutex_items_received=200000
+handoff_mutex_dropped_count=0
+handoff_mutex_out_of_order_count=0
+handoff_mutex_duplicate_count=0
+handoff_mutex_full_retries=0
+handoff_mutex_sample_count=200000
+handoff_mutex_p50_us=10906.745
+handoff_mutex_p99_us=16819.617
+handoff_mutex_p999_us=16926.163
+# handoff_mutex histogram (bucket range in microseconds, count, bar)
+    43.023 us -    887.939 us | ####### 3220
+   887.939 us -   1732.855 us | ##### 2509
+  1732.855 us -   2577.772 us | ################### 8866
+  2577.772 us -   3422.688 us | ####################### 10610
+  3422.688 us -   4267.604 us | ############# 5939
+  4267.604 us -   5112.520 us | ###### 2919
+  5112.520 us -   5957.436 us | ###### 3009
+  5957.436 us -   6802.353 us | ######## 3887
+  6802.353 us -   7647.269 us | ########## 4516
+  7647.269 us -   8492.185 us | ############## 6525
+  8492.185 us -   9337.101 us | ######################################## 17995
+  9337.101 us -  10182.017 us | ###################################### 17391
+ 10182.017 us -  11026.934 us | ################################ 14574
+ 11026.934 us -  11871.850 us | ################################ 14826
+ 11871.850 us -  12716.766 us | ################################# 15238
+ 12716.766 us -  13561.682 us | ############################### 14051
+ 13561.682 us -  14406.598 us | ############################### 14359
+ 14406.598 us -  15251.515 us | ############################ 12964
+ 15251.515 us -  16096.431 us | ########################### 12464
+ 16096.431 us -  16941.347 us | ############################### 14138
+
+# --- lane 2: wait-free SPSC ring (atomics, acquire/release) ---
+handoff_ring_items_sent=200000
+handoff_ring_items_received=200000
+handoff_ring_dropped_count=0
+handoff_ring_out_of_order_count=0
+handoff_ring_duplicate_count=0
+handoff_ring_full_retries=176381
+handoff_ring_sample_count=200000
+handoff_ring_p50_us=714.584
+handoff_ring_p99_us=875.431
+handoff_ring_p999_us=1004.058
+# handoff_ring histogram (bucket range in microseconds, count, bar)
+   116.400 us -    162.239 us |  148
+   162.239 us -    208.079 us |  161
+   208.079 us -    253.918 us |  157
+   253.918 us -    299.757 us |  369
+   299.757 us -    345.596 us |  561
+   345.596 us -    391.436 us |  571
+   391.436 us -    437.275 us |  561
+   437.275 us -    483.114 us |  569
+   483.114 us -    528.954 us |  563
+   528.954 us -    574.793 us |  560
+   574.793 us -    620.632 us |  543
+   620.632 us -    666.472 us |  536
+   666.472 us -    712.311 us | ####################### 69898
+   712.311 us -    758.150 us | ######################################## 121187
+   758.150 us -    803.990 us |  613
+   803.990 us -    849.829 us |  648
+   849.829 us -    895.668 us |  641
+   895.668 us -    941.507 us |  641
+   941.507 us -    987.347 us |  633
+   987.347 us -   1033.186 us |  440

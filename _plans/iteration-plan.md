@@ -78,3 +78,8 @@ and the new `ci.yml` summary check (items 1-3) shipped in r01. Chapter
 numbering versus reading order, the per-call percentile sort, and the
 CLAUDE.md voice-scanner false positive (the remaining three items above) are
 still open, deferred to the iteration that touches each.
+
+r03 status: the hermetic, pinned Rust toolchain (`scripts/bootstrap-rust.sh`,
+`scripts/rust-env.sh`, `rust-toolchain.toml`) and its CI lane landed ahead of
+the chapter content, so the wait-free synchronization chapter's Rust lane has
+a toolchain to build against on day one.
