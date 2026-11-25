@@ -72,3 +72,9 @@ low-severity items into r01 before the work they touch:
 - **CLAUDE.md voice-scanner false positive (cosmetic).** The voice scanner
   flags CLAUDE.md's own list of banned reassurance words. No prose fix; add a
   scanner ignore for CLAUDE.md if the noise is bothersome.
+
+r01 status: the pages.yml PR-safe split, the per-lane sanitizer toolchain,
+and the new `ci.yml` summary check (items 1-3) shipped in r01. Chapter
+numbering versus reading order, the per-call percentile sort, and the
+CLAUDE.md voice-scanner false positive (the remaining three items above) are
+still open, deferred to the iteration that touches each.

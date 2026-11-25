@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 320" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8650a"/></marker></defs>
+<rect x="20" y="40" width="840" height="200" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="60" font-size="12" font-weight="700" fill="#888">scan-to-divert distribution (schematic, not to scale)</text>
+<rect x="60" y="150" width="260" height="70" rx="9" fill="#fff8ef" stroke="#e8870c" stroke-width="2"/>
+<text x="190.0" y="183.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">Fast path</text>
+<text x="190.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">~99.6% of parcels</text>
+<rect x="680" y="90" width="140" height="130" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="750.0" y="153.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">Stall tail</text>
+<text x="750.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">~0.4% of parcels</text>
+<path d="M40,225 L840,225" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="446.0" y="219.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">scan-to-divert, low to high</text>
+<text x="446.0" y="219.0" font-size="11" fill="#555" text-anchor="middle">scan-to-divert, low to high</text>
+<path d="M280,150 L280,225" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="286.0" y="181.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">naive p99</text>
+<text x="286.0" y="181.5" font-size="11" fill="#555" text-anchor="middle">naive p99</text>
+<path d="M430,110 L430,225" fill="none" stroke="#b8650a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#am)"/>
+<text x="436.0" y="161.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">naive mean</text>
+<text x="436.0" y="161.5" font-size="11" fill="#b8650a" text-anchor="middle">naive mean</text>
+<path d="M695,90 L695,225" fill="none" stroke="#b8650a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#am)"/>
+<text x="701.0" y="151.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">corrected p99</text>
+<text x="701.0" y="151.5" font-size="11" fill="#b8650a" text-anchor="middle">corrected p99</text>
+<text x="430" y="70" font-size="11" fill="#888" text-anchor="middle">no parcel actually takes this long</text>
+</svg>

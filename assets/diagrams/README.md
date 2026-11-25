@@ -7,4 +7,5 @@ here as you add them:
 
 | Diagram | Chapter | What it shows |
 |---|---|---|
-| `example-flow` | 1 | (replace with your diagrams) |
+| `scan-to-divert-line` | 0 | The parcel sortation line's five stages, with the scan-to-divert measurement window bracketed under scan and sort |
+| `mean-versus-tail` | 1 | A schematic scan-to-divert distribution: a fast-path cluster and a separate stall tail, with naive mean, naive p99, and corrected p99 marked to show where each one actually lands |

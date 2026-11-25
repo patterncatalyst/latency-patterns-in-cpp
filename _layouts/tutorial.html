@@ -22,10 +22,14 @@ layout: default
 {%- assign next_doc = tutorial_docs[next_index] -%}
 
 {%- comment -%}
-  Pad order to two digits for the big numeric marker.
+  Pad order to two digits for the big numeric marker. A negative order (the
+  TOC outline page, not a numbered chapter) gets a dash instead of a
+  zero-padded negative number.
 {%- endcomment -%}
 {%- assign order_num = page.order | default: 0 -%}
-{%- if order_num < 10 -%}
+{%- if order_num < 0 -%}
+  {%- assign order_padded = "–" -%}
+{%- elsif order_num < 10 -%}
   {%- assign order_padded = order_num | prepend: '0' -%}
 {%- else -%}
   {%- assign order_padded = order_num | append: '' -%}
@@ -58,7 +62,11 @@ layout: default
           {%- if page.duration -%}
             <span class="chip">⏱ {{ page.duration }}</span>
           {%- endif -%}
-          <span class="chip">Chapter {{ page.order }}</span>
+          {%- if order_num < 0 -%}
+            <span class="chip">Overview</span>
+          {%- else -%}
+            <span class="chip">Chapter {{ page.order }}</span>
+          {%- endif -%}
           {%- if page.part -%}<span class="chip chip--accent">{{ page.part }}</span>{%- endif -%}
         </div>
       </div>

@@ -1,0 +1,38 @@
+# Chapter 0 baseline: scan-to-divert, uncorrected, no technique applied.
+profile_label=ch00-baseline
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+belt_speed_m_per_s=2
+scan_to_diverter_distance_m=1.5
+parcels_per_second=10
+parcel_count=1000
+scan_to_divert_deadline_us=750000.000
+sample_count=1000
+p50_us=0.055
+p99_us=0.076
+p999_us=0.543
+# histogram (bucket range in microseconds, count, bar)
+     0.052 us -      0.077 us | ######################################## 992
+     0.077 us -      0.101 us |  6
+     0.101 us -      0.126 us |  0
+     0.126 us -      0.150 us |  0
+     0.150 us -      0.175 us |  0
+     0.175 us -      0.199 us |  0
+     0.199 us -      0.224 us |  0
+     0.224 us -      0.248 us |  0
+     0.248 us -      0.273 us |  0
+     0.273 us -      0.298 us |  0
+     0.297 us -      0.322 us |  0
+     0.322 us -      0.347 us |  0
+     0.347 us -      0.371 us |  1
+     0.371 us -      0.396 us |  0
+     0.396 us -      0.420 us |  0
+     0.420 us -      0.445 us |  0
+     0.445 us -      0.469 us |  0
+     0.469 us -      0.494 us |  0
+     0.494 us -      0.518 us |  0
+     0.518 us -      0.543 us |  1
