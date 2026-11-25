@@ -162,7 +162,7 @@ Capacity is fixed and a power of two, so advancing an index is a mask, not
 a modulo, and one slot always stays empty: `head_ == tail_` unambiguously
 means empty, never confused with full. A full ring returns `false`
 immediately rather than blocking; this chapter's trial retries in a tight
-loop when that happens (178 thousand times out of 200,000 pushes, on the
+loop when that happens (176 thousand times out of 200,000 pushes, on the
 run below, since the ring's consumer runs flat out too but still falls
 behind under contention), which is a choice the caller makes, not
 something the ring imposes.

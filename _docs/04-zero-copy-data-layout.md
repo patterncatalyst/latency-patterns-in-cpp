@@ -351,10 +351,9 @@ where their data sits to how they hand work to each other without a lock.
 ---
 
 *Verification status: <span class="status status--verified">verified</span>.
-Built with the default CMake/Conan lane; `ctest --preset default` passes (62
-tests total, including this chapter's new `layout_scan_stage` and
-`false_sharing` GoogleTests; every prior chapter's tests still pass
-unchanged). The ASan/UBSan lane (`cmake --preset asan-ubsan`) builds
+Built with the default CMake/Conan lane; `ctest --preset default` passes,
+including this chapter's new `layout_scan_stage` and `false_sharing`
+GoogleTests, with every prior chapter's tests still green. The ASan/UBSan lane (`cmake --preset asan-ubsan`) builds
 clean, its own `ctest --preset asan-ubsan` passes, and the example binary
 runs clean under that lane with no sanitizer report. Because this
 chapter's false-sharing lane is multithreaded, the TSan lane (`cmake
