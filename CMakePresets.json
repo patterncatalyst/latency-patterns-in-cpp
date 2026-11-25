@@ -6,8 +6,6 @@
       "name": "conan-base",
       "hidden": true,
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build",
-      "toolchainFile": "${sourceDir}/build/conan_toolchain.cmake",
       "cacheVariables": {
         "CMAKE_C_COMPILER": "${sourceDir}/.toolchain/llvm-23.1.6/bin/clang",
         "CMAKE_CXX_COMPILER": "${sourceDir}/.toolchain/llvm-23.1.6/bin/clang++",
@@ -18,6 +16,8 @@
       "name": "default",
       "displayName": "Debug (no sanitizers)",
       "inherits": "conan-base",
+      "binaryDir": "${sourceDir}/build",
+      "toolchainFile": "${sourceDir}/build/conan_toolchain.cmake",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
     },
     {
@@ -25,6 +25,7 @@
       "displayName": "Debug + AddressSanitizer + UBSan (default checked lane)",
       "inherits": "conan-base",
       "binaryDir": "${sourceDir}/build-asan",
+      "toolchainFile": "${sourceDir}/build-asan/conan_toolchain.cmake",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "ENABLE_ASAN_UBSAN": "ON"
@@ -35,6 +36,7 @@
       "displayName": "Debug + ThreadSanitizer (run alone)",
       "inherits": "conan-base",
       "binaryDir": "${sourceDir}/build-tsan",
+      "toolchainFile": "${sourceDir}/build-tsan/conan_toolchain.cmake",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "ENABLE_TSAN": "ON"
@@ -45,6 +47,7 @@
       "displayName": "Release (optimized, no clang-tidy)",
       "inherits": "conan-base",
       "binaryDir": "${sourceDir}/build-release",
+      "toolchainFile": "${sourceDir}/build-release/conan_toolchain.cmake",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "ENABLE_CLANG_TIDY": "OFF"

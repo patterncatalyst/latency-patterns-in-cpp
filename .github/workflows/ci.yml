@@ -1,0 +1,50 @@
+# Fast CI gate, the one check the branch ruleset requires: ci-ok. Static
+# checks only — never builds the C++ toolchain here. The C++ examples are
+# verified locally and by scripts/validate.py's harness-cap check; pulling
+# Clang/LLVM into CI would make the CI config the thing that outgrows the
+# content (see CLAUDE.md, "Scope discipline").
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python3 -I scripts/validate.py
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: shellcheck --severity=warning scripts/*.sh
+
+  jekyll-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - run: bundle exec jekyll build
+
+  # The one check the ruleset requires. Passes only when every job above
+  # succeeded (none are conditionally skipped here, but the pattern matches
+  # the lgtm-github summary-job skeleton so this stays droppable in place).
+  ci-ok:
+    if: always()
+    needs: [validate, shellcheck, jekyll-build]
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: jq -e 'to_entries | all(.value.result == "success" or .value.result == "skipped")' <<<"$NEEDS"

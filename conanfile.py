@@ -6,10 +6,23 @@
 #   conan search <name> -r conancenter
 #
 # Build with the project's own user-space Clang (see
-# scripts/toolchain-env.sh), never the Fedora-packaged compiler:
+# scripts/toolchain-env.sh), never the Fedora-packaged compiler. Each CMake
+# lane in CMakePresets.json is self-sufficient: its toolchainFile points at
+# its own binaryDir, so run `conan install` once per lane, into that lane's
+# binaryDir, before configuring that lane. A fresh checkout only needs the
+# lane it is about to use; it does not need the default lane installed
+# first.
 #   eval "$(scripts/toolchain-env.sh)"
 #   conan install . -pr:a conan/profiles/clang23 --build=missing \
-#       -of build -s build_type=Debug
+#       -of build -s build_type=Debug             # default lane
+#   conan install . -pr:a conan/profiles/clang23 --build=missing \
+#       -of build-asan -s build_type=Debug         # asan-ubsan lane
+#   conan install . -pr:a conan/profiles/clang23 --build=missing \
+#       -of build-tsan -s build_type=Debug         # tsan lane
+#   conan install . -pr:a conan/profiles/clang23 --build=missing \
+#       -of build-release -s build_type=Release    # release lane
+#
+# Then configure the matching preset, e.g. `cmake --preset asan-ubsan`.
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMakeDeps
 
