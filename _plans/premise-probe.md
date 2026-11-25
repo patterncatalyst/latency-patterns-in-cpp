@@ -9,7 +9,7 @@ render_with_liquid: false
 Before any lane or harness gets built around a technique, r00/r01 measure its
 effect size on this host with a quick, throwaway probe. A technique whose
 effect disappears into noise on an untuned laptop gets flagged `exploratory`
-here, not hidden from the chapter. Fill in the `Measured effect` and `Flag`
+here, with the reason stated in the chapter. Fill in the `Measured effect` and `Flag`
 columns as each probe runs; `TBD` means not yet measured.
 
 | Ch | Technique | Probe (what gets run) | Measured effect | Flag |

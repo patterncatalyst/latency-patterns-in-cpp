@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - run: shellcheck --severity=warning scripts/*.sh
+      - run: shellcheck --severity=warning scripts/*.sh examples/*/demo.sh
 
   jekyll-build:
     runs-on: ubuntu-latest
