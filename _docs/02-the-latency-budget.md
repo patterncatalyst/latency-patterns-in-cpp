@@ -90,13 +90,14 @@ and no further.
 
 This chapter's own measurements supply `p`: the scan stage's share of the
 scan_to_divert total (scan plus label plus sort, the three stages inside the
-deadline window). Scan's mean cost is 5.495 microseconds against a
-scan_to_divert mean of 6.700 microseconds, so `p` is about 0.82.
+deadline window). The model below takes the scan stage's mean against the
+scan_to_divert mean as a planning input, which puts `p` at about 0.82.
 
 ```model
 # Amdahl's Law (speedup = 1 / ((1 - p) + p / workers)): a planning estimate.
 # p is this run's measured scan-stage mean over its scan_to_divert mean
 # (both means are modelling inputs only, never reported as latencies).
+# scan_stage_mean = 5.495 microseconds; scan_to_divert_mean = 6.700 microseconds
 p_parallel_fraction = 0.8201
 speedup_at_2_workers = 1.695
 speedup_at_4_workers = 2.598
@@ -206,7 +207,10 @@ that stage's own sample vector, and when the stage being timed is Sort, the
 last stage in order, it sums the three just-recorded values for scan, label,
 and sort into the `scan_to_divert` lane, never by re-timing start to finish,
 so "the parts add up to the total" is true by construction rather than
-something a later bug could silently break.
+something a later bug could silently break. The other chapters clock
+scan_to_divert as one continuous sense-to-act span from the probe; this
+chapter sums the three in-window stages instead, so the two figures describe
+the same window by different means.
 
 **The five workloads.** Checkweigh and dimension (`ch02::checkweigh_work`,
 `ch02::dimension_work`) average several synthetic noisy readings into one
@@ -290,10 +294,9 @@ just named as the heaviest one on the line.
 ---
 
 *Verification status: <span class="status status--verified">verified</span>.
-Built with the default CMake/Conan lane; `ctest --preset default` passes (47
-tests total, including the new `PipelineTimingHarness`, stage-workload, and
-`budget_model` GoogleTests; the two prior chapters' tests still pass
-unchanged). The ASan/UBSan lane (`cmake --preset asan-ubsan`) builds clean,
+Built with the default CMake/Conan lane; `ctest --preset default` passes,
+including the new `PipelineTimingHarness`, stage-workload, and `budget_model`
+GoogleTests, with the prior chapters' tests still green. The ASan/UBSan lane (`cmake --preset asan-ubsan`) builds clean,
 its own `ctest --preset asan-ubsan` passes, and the example binary runs
 clean under that lane with no sanitizer report.
 `examples/02-latency-budget/demo.sh` ran on an unprivileged, untuned

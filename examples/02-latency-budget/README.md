@@ -75,9 +75,9 @@ commit on a leak.
 ## Verification status
 
 *Verification status: <span class="status status--verified">verified</span>.
-Built with the default CMake/Conan lane; `ctest --preset default` passes (47
-tests total across every chapter, including this chapter's new
-`PipelineTimingHarness`, stage-workload, and `budget_model` GoogleTests). The
+Built with the default CMake/Conan lane; `ctest --preset default` passes,
+including this chapter's new `PipelineTimingHarness`, stage-workload, and
+`budget_model` GoogleTests. The
 ASan/UBSan lane (`cmake --preset asan-ubsan`) builds clean, its own
 `ctest --preset asan-ubsan` passes, and the example binary runs clean under
 that lane (no sanitizer report). `./demo.sh` was run on an unprivileged,
