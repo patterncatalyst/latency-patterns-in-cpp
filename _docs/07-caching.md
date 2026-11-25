@@ -86,7 +86,7 @@ oldest *insertion* is evicted, not the oldest *access*, exactly the
 distinction the measurement below isolates.
 
 **LFU** (`ch07::LfuCache`) evicts whichever key has been touched fewest
-times, via the standard constant-time structure (K. Shah, A. Mitra, and D.
+times, via the standard constant-time structure (K. V. Shah, A. Mitra, and D.
 Matani's O(1) LFU design; see "For deeper coverage"): one bucket per
 frequency and a `min_freq_` counter tracking the lowest non-empty one. A
 hit moves a key up one bucket; an eviction pops the key touched longest
