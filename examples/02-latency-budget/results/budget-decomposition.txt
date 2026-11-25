@@ -1,0 +1,194 @@
+# Chapter 2 budget-decomposition run: a real, timed workload at
+# every one of the five stages (see ch02::PipelineTimingHarness).
+# checkweigh/dimension/scan/label/sort are each their own measured
+# lane; scan_to_divert sums scan+label+sort (the three stages that
+# run at or after the scanner, inside the physical scan-to-divert
+# window); checkweigh and dimension finish before the parcel
+# reaches the scanner, so they are reported but excluded from that
+# sum. model_* lines are Little's Law / Amdahl's Law planning
+# estimates, never a reported latency (see CLAUDE.md, "Measurement
+# discipline").
+profile_label=ch02-budget
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+belt_speed_m_per_s=2
+scan_to_diverter_distance_m=1.5
+parcels_per_second=10
+parcel_count=5000
+scan_to_divert_deadline_us=750000.000
+checkweigh_sample_count=5000
+checkweigh_p50_us=0.047
+checkweigh_p99_us=0.140
+checkweigh_p999_us=0.167
+# checkweigh histogram (bucket range in microseconds, count, bar)
+     0.041 us -      0.055 us | ######################################## 3090
+     0.055 us -      0.069 us | ###### 539
+     0.069 us -      0.083 us | # 84
+     0.083 us -      0.097 us |  72
+     0.097 us -      0.112 us | ##### 443
+     0.112 us -      0.126 us | #### 366
+     0.126 us -      0.140 us | #### 354
+     0.140 us -      0.154 us |  39
+     0.154 us -      0.168 us |  10
+     0.168 us -      0.182 us |  1
+     0.182 us -      0.196 us |  0
+     0.196 us -      0.210 us |  0
+     0.210 us -      0.224 us |  0
+     0.224 us -      0.238 us |  0
+     0.238 us -      0.253 us |  0
+     0.253 us -      0.267 us |  1
+     0.267 us -      0.281 us |  0
+     0.281 us -      0.295 us |  0
+     0.295 us -      0.309 us |  0
+     0.309 us -      0.323 us |  1
+dimension_sample_count=5000
+dimension_p50_us=0.078
+dimension_p99_us=0.247
+dimension_p999_us=0.294
+# dimension histogram (bucket range in microseconds, count, bar)
+     0.064 us -      0.076 us | ######################################## 2219
+     0.076 us -      0.089 us | ############## 791
+     0.089 us -      0.101 us | ####### 390
+     0.101 us -      0.114 us | ### 208
+     0.114 us -      0.126 us | # 79
+     0.126 us -      0.139 us |  25
+     0.139 us -      0.151 us |  22
+     0.151 us -      0.164 us |  27
+     0.164 us -      0.176 us | # 83
+     0.176 us -      0.188 us | ## 158
+     0.189 us -      0.201 us | #### 264
+     0.201 us -      0.213 us | ##### 304
+     0.213 us -      0.226 us | ## 154
+     0.226 us -      0.238 us | ### 188
+     0.238 us -      0.251 us |  51
+     0.251 us -      0.263 us |  23
+     0.263 us -      0.276 us |  7
+     0.276 us -      0.288 us |  2
+     0.288 us -      0.301 us |  2
+     0.301 us -      0.313 us |  3
+scan_sample_count=5000
+scan_p50_us=3.312
+scan_p99_us=15.958
+scan_p999_us=19.358
+# scan histogram (bucket range in microseconds, count, bar)
+     3.218 us -      4.842 us | ######################################## 3603
+     4.842 us -      6.467 us | # 133
+     6.467 us -      8.091 us | # 112
+     8.091 us -      9.716 us | ###### 542
+     9.716 us -     11.340 us |  80
+    11.340 us -     12.965 us |  2
+    12.965 us -     14.589 us |  0
+    14.589 us -     16.214 us | ##### 516
+    16.214 us -     17.838 us |  1
+    17.838 us -     19.462 us |  7
+    19.462 us -     21.087 us |  1
+    21.087 us -     22.711 us |  0
+    22.711 us -     24.336 us |  0
+    24.336 us -     25.960 us |  0
+    25.960 us -     27.585 us |  0
+    27.585 us -     29.209 us |  0
+    29.209 us -     30.834 us |  0
+    30.834 us -     32.458 us |  2
+    32.458 us -     34.083 us |  0
+    34.083 us -     35.707 us |  1
+label_sample_count=5000
+label_p50_us=0.914
+label_p99_us=2.362
+label_p999_us=5.190
+# label histogram (bucket range in microseconds, count, bar)
+     0.783 us -      2.190 us | ######################################## 4898
+     2.190 us -      3.598 us |  95
+     3.598 us -      5.005 us |  2
+     5.005 us -      6.413 us |  1
+     6.413 us -      7.820 us |  0
+     7.820 us -      9.228 us |  1
+     9.228 us -     10.635 us |  0
+    10.635 us -     12.043 us |  1
+    12.043 us -     13.450 us |  0
+    13.450 us -     14.857 us |  0
+    14.857 us -     16.265 us |  0
+    16.265 us -     17.672 us |  0
+    17.672 us -     19.080 us |  0
+    19.080 us -     20.487 us |  1
+    20.487 us -     21.895 us |  0
+    21.895 us -     23.302 us |  0
+    23.302 us -     24.710 us |  0
+    24.710 us -     26.117 us |  0
+    26.117 us -     27.525 us |  0
+    27.525 us -     28.932 us |  1
+sort_sample_count=5000
+sort_p50_us=0.022
+sort_p99_us=0.070
+sort_p999_us=0.131
+# sort histogram (bucket range in microseconds, count, bar)
+     0.018 us -      0.049 us | ######################################## 4355
+     0.049 us -      0.080 us | ##### 632
+     0.080 us -      0.112 us |  8
+     0.112 us -      0.143 us |  1
+     0.143 us -      0.174 us |  1
+     0.174 us -      0.205 us |  1
+     0.205 us -      0.236 us |  0
+     0.236 us -      0.268 us |  0
+     0.268 us -      0.299 us |  0
+     0.299 us -      0.330 us |  0
+     0.330 us -      0.361 us |  1
+     0.361 us -      0.392 us |  0
+     0.392 us -      0.424 us |  0
+     0.424 us -      0.455 us |  0
+     0.455 us -      0.486 us |  0
+     0.486 us -      0.517 us |  0
+     0.517 us -      0.548 us |  0
+     0.548 us -      0.580 us |  0
+     0.580 us -      0.611 us |  0
+     0.611 us -      0.642 us |  1
+# scan_to_divert: scan + label + sort, summed per parcel from the
+# three measured spans above, never re-measured end to end
+scan_to_divert_sample_count=5000
+scan_to_divert_p50_us=4.235
+scan_to_divert_p99_us=17.905
+scan_to_divert_p999_us=22.544
+# scan_to_divert histogram (bucket range in microseconds, count, bar)
+     4.026 us -      6.490 us | ######################################## 3676
+     6.490 us -      8.954 us |  63
+     8.954 us -     11.418 us | ###### 643
+    11.418 us -     13.882 us |  84
+    13.882 us -     16.345 us |  3
+    16.346 us -     18.809 us | ##### 517
+    18.809 us -     21.273 us |  7
+    21.273 us -     23.737 us |  3
+    23.737 us -     26.201 us |  0
+    26.201 us -     28.665 us |  0
+    28.665 us -     31.129 us |  0
+    31.129 us -     33.593 us |  0
+    33.593 us -     36.057 us |  1
+    36.057 us -     38.521 us |  1
+    38.521 us -     40.985 us |  1
+    40.984 us -     43.448 us |  0
+    43.448 us -     45.912 us |  0
+    45.912 us -     48.376 us |  0
+    48.376 us -     50.840 us |  0
+    50.840 us -     53.304 us |  1
+# model_little_law: L = lambda * W, lambda = arrival rate, W = the
+# scan-to-divert deadline (the time a parcel spends in the segment
+# between the scanner and the diverter). A planning estimate, not a
+# count this run actually observed in flight.
+model_little_law_w_s=0.750000
+model_little_law_default_lambda_per_s=10.000000
+model_little_law_default_L_estimate=7.500
+model_little_law_loaded_lambda_per_s=2000.000
+model_little_law_loaded_L_estimate=1500.000
+# model_amdahl: speedup = 1 / ((1 - p) + p / workers), p = this
+# run's measured scan-stage mean divided by its measured
+# scan_to_divert mean (both means are modelling inputs only, never
+# reported as latencies elsewhere in this guide).
+model_amdahl_scan_mean_us=5.495
+model_amdahl_scan_to_divert_mean_us=6.700
+model_amdahl_parallel_fraction=0.8201
+model_amdahl_speedup_2workers=1.695
+model_amdahl_speedup_4workers=2.598
+model_amdahl_speedup_8workers=3.541
+model_amdahl_speedup_ceiling=5.558
