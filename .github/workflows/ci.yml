@@ -37,10 +37,15 @@ jobs:
           bundler-cache: true
       - run: bundle exec jekyll build
 
-  # Toolchain probe only (see examples/_rust-probe/); the first real Rust
-  # lane lands with the wait-free synchronization chapter. Uses the
-  # GitHub-hosted runner's own rustup, which honors rust-toolchain.toml at
-  # the repo root; the repo-local hermetic toolchain from
+  # examples/_rust-probe/ is the toolchain probe only; examples/05-wait-free-
+  # sync/rust/ is the first real Rust lane (see CLAUDE.md, "The spine": Rust
+  # appears only in Ch5, Ch6, Ch9). Two separate --manifest-path sets rather
+  # than a workspace: each chapter's Rust lane stays a self-contained crate
+  # under its own examples/NN-name/rust/, matching the C++ side's one-
+  # directory-per-chapter layout, so a later chapter's crate is additive
+  # here rather than touching a shared workspace file. Uses the GitHub-
+  # hosted runner's own rustup, which honors rust-toolchain.toml at the
+  # repo root; the repo-local hermetic toolchain from
   # scripts/bootstrap-rust.sh is for the dev host, not CI.
   rust:
     runs-on: ubuntu-latest
@@ -50,6 +55,9 @@ jobs:
       - run: cargo fmt --manifest-path examples/_rust-probe/Cargo.toml --check
       - run: cargo clippy --manifest-path examples/_rust-probe/Cargo.toml -- -D warnings
       - run: cargo test --manifest-path examples/_rust-probe/Cargo.toml
+      - run: cargo fmt --manifest-path examples/05-wait-free-sync/rust/Cargo.toml --check
+      - run: cargo clippy --manifest-path examples/05-wait-free-sync/rust/Cargo.toml --all-targets -- -D warnings
+      - run: cargo test --manifest-path examples/05-wait-free-sync/rust/Cargo.toml
 
   # The one check the ruleset requires. Passes only when every job above
   # succeeded (none are conditionally skipped here, but the pattern matches
