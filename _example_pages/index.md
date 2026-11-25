@@ -7,10 +7,11 @@ description: "Every runnable example in this repo, mapped to the chapter it supp
 
 Every chapter in this guide ships one runnable example under
 [`examples/`](https://github.com/{{ site.github_username }}/{{ site.github_repo }}/tree/main/examples)
-in the repo, measured against the same parcel sortation line. No chapters have
-shipped yet; this page fills in one row per example as each chapter lands. See
-the [iteration plan]({{ '/plans/iteration-plan/' | relative_url }}) for the
-order chapters ship in.
+in the repo, measured against the same parcel sortation line. This page fills
+in one row per example as each chapter lands. See the
+[iteration plan]({{ '/plans/iteration-plan/' | relative_url }}) for the order
+chapters ship in.
 
 | Example | What it shows | Chapter |
 |---|---|---|
+| [`00-running-example`](https://github.com/{{ site.github_username }}/{{ site.github_repo }}/tree/main/examples/00-running-example) | The parcel sortation line and the measurement harness; the uncorrected scan-to-divert baseline every later chapter compares against | [The running example and the harness]({{ '/docs/00-running-example-and-harness/' | relative_url }}) |

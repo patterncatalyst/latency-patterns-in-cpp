@@ -43,3 +43,8 @@ CMakeUserPresets.json
 
 # Results that may carry host-specific artifacts before scrubbing
 examples/**/results/.raw/
+
+# measure::init_logging() rotating file logs (see examples/_lib), written
+# relative to the CWD a chapter's binary runs from, e.g. examples/NN-name/logs/
+logs/
+**/logs/

@@ -21,8 +21,9 @@ permalink: /docs/00-index/
   <div class="container container-prose">
     {%- comment -%}
       Auto-generated table of contents: iterate the Parts, then each Part's
-      chapters. The prose outline (order 0) is excluded from the list and linked
-      from the hero above instead. New chapters/parts appear here automatically.
+      chapters. The prose outline (order -1, not a numbered chapter) is
+      excluded from the list and linked from the hero above instead. New
+      chapters/parts appear here automatically.
     {%- endcomment -%}
     {%- assign parts_sorted = site.parts | sort: "order" -%}
     {%- for part in parts_sorted -%}

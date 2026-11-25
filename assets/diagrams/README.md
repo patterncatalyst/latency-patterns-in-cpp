@@ -7,4 +7,4 @@ here as you add them:
 
 | Diagram | Chapter | What it shows |
 |---|---|---|
-| `example-flow` | 1 | (replace with your diagrams) |
+| `scan-to-divert-line` | 0 | The parcel sortation line's five stages, with the scan-to-divert measurement window bracketed under scan and sort |

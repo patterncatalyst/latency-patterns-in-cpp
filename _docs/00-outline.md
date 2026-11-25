@@ -1,6 +1,6 @@
 ---
 title: "Outline"
-order: 0
+order: -1  # before Chapter 0; keeps the TOC page's order from colliding with a real chapter number
 part: "Measuring Latency"
 description: "The twelve chapters of v1, the running example, and what each one measures."
 ---

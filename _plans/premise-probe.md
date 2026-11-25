@@ -14,6 +14,7 @@ columns as each probe runs; `TBD` means not yet measured.
 
 | Ch | Technique | Probe (what gets run) | Measured effect | Flag |
 |---|---|---|---|---|
+| 0 | Baseline scan-to-divert (no technique; the number every later probe compares against) | `examples/00-running-example` at the house default config (2.0 m/s belt, 1.5 m scan-to-diverter distance, 1000 parcels, no coordinated-omission correction) | p50=0.055us, p99=0.076us, p99.9=0.543us; deadline=750000.000us; measured on a 16-core/22-thread laptop CPU, powersave governor, bare metal, no pinning/isolation (see `examples/00-running-example/results/baseline.txt`) | baseline (not an A/B probe) |
 | 1 | Mean versus distribution under load | Line-simulator at a fixed rate, compare a time-averaged latency figure to p50/p99/p99.9 of the same run | TBD | TBD |
 | 3 | Precomputed divert table versus per-parcel recompute | Scan decode path, A/B the two lookup strategies at the same input rate | TBD | TBD |
 | 4 | AoS versus SoA parcel record | Same scan/divert loop, swap only the record layout | TBD | TBD |
