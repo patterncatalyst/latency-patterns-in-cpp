@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 410" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8650a"/></marker></defs>
+<rect x="20" y="40" width="410" height="160" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="60" font-size="12" font-weight="700" fill="#888">before: ring of pointers (AoS)</text>
+<rect x="460" y="40" width="410" height="160" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="472" y="60" font-size="12" font-weight="700" fill="#888">after: contiguous SoA (hot column)</text>
+<rect x="20" y="230" width="410" height="160" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="250" font-size="12" font-weight="700" fill="#888">before: counters share one cache line</text>
+<rect x="460" y="230" width="410" height="160" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="472" y="250" font-size="12" font-weight="700" fill="#888">after: one cache line per counter</text>
+<rect x="40" y="70" width="70" height="30" rx="9" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="75.0" y="90.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">slot 0</text>
+<rect x="130" y="70" width="70" height="30" rx="9" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="165.0" y="90.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">slot 1</text>
+<rect x="220" y="70" width="70" height="30" rx="9" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="255.0" y="90.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">slot 2</text>
+<rect x="310" y="70" width="70" height="30" rx="9" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="345.0" y="90.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">slot 3</text>
+<rect x="40" y="140" width="80" height="34" rx="9" fill="#ffffff" stroke="#999999" stroke-width="1.5"/>
+<text x="80.0" y="155.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">record</text>
+<text x="80.0" y="172.0" font-size="11.5" fill="#555555" text-anchor="middle">(own heap block)</text>
+<rect x="150" y="160" width="80" height="34" rx="9" fill="#ffffff" stroke="#999999" stroke-width="1.5"/>
+<text x="190.0" y="175.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">record</text>
+<text x="190.0" y="192.0" font-size="11.5" fill="#555555" text-anchor="middle">(own heap block)</text>
+<rect x="260" y="125" width="80" height="34" rx="9" fill="#ffffff" stroke="#999999" stroke-width="1.5"/>
+<text x="300.0" y="140.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">record</text>
+<text x="300.0" y="157.0" font-size="11.5" fill="#555555" text-anchor="middle">(own heap block)</text>
+<rect x="330" y="165" width="80" height="34" rx="9" fill="#ffffff" stroke="#999999" stroke-width="1.5"/>
+<text x="370.0" y="180.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">record</text>
+<text x="370.0" y="197.0" font-size="11.5" fill="#555555" text-anchor="middle">(own heap block)</text>
+<rect x="480" y="80" width="370" height="50" rx="9" fill="#fff8ef" stroke="#e8870c" stroke-width="2"/>
+<text x="665.0" y="103.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">scan_keys[] - contiguous</text>
+<text x="665.0" y="120.0" font-size="11.5" fill="#555555" text-anchor="middle">256 ints, hot path reads only this</text>
+<rect x="480" y="150" width="370" height="36" rx="9" fill="#ffffff" stroke="#999999" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="665.0" y="173.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">cold fields - separate store, never read here</text>
+<rect x="120" y="265" width="210" height="60" rx="9" fill="#fff8ef" stroke="#e8870c" stroke-width="2"/>
+<text x="225.0" y="293.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">one 64-byte cache line</text>
+<text x="225.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">scan_count | divert_count</text>
+<rect x="40" y="345" width="130" height="36" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="105.0" y="368.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">scan thread</text>
+<rect x="270" y="345" width="130" height="36" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="335.0" y="368.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">divert thread</text>
+<rect x="480" y="265" width="170" height="60" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="565.0" y="293.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">cache line A</text>
+<text x="565.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">scan_count</text>
+<rect x="690" y="265" width="170" height="60" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="775.0" y="293.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">cache line B</text>
+<text x="775.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">divert_count</text>
+<rect x="480" y="345" width="170" height="36" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="565.0" y="368.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">scan thread</text>
+<rect x="690" y="345" width="170" height="36" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="775.0" y="368.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">divert thread</text>
+<path d="M75,100 L80,140" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M165,100 L190,160" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M255,100 L300,125" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M345,100 L370,165" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M105,345 L180,325" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="148.5" y="329.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">writes</text>
+<text x="148.5" y="329.0" font-size="11" fill="#b8650a" text-anchor="middle">writes</text>
+<path d="M335,345 L270,325" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="308.5" y="329.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">writes</text>
+<text x="308.5" y="329.0" font-size="11" fill="#b8650a" text-anchor="middle">writes</text>
+<path d="M565,345 L565,325" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="571.0" y="329.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">writes</text>
+<text x="571.0" y="329.0" font-size="11" fill="#555" text-anchor="middle">writes</text>
+<path d="M775,345 L775,325" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="781.0" y="329.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">writes</text>
+<text x="781.0" y="329.0" font-size="11" fill="#555" text-anchor="middle">writes</text>
+<text x="450" y="20" font-size="14" fill="#888" text-anchor="middle" font-weight="700">Figure 4.1</text>
+</svg>
