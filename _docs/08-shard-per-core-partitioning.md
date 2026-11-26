@@ -293,15 +293,15 @@ system without the watching itself becoming the next bottleneck.
 
 *Verification status: <span class="status status--verified">verified</span>.
 C++ built with the default CMake/Conan lane; `ctest --preset default`
-passes (148 tests total, including this chapter's 29 new GoogleTests
-across routing, both trackers, both trial runners, and skew detection;
-every prior chapter's tests still pass unchanged). The ASan/UBSan lane
-builds clean, its own `ctest --preset asan-ubsan` passes (148 tests), and
-the example binary runs clean under it. Because this chapter is concurrent
-by definition, the TSan lane was also built: `ctest --preset tsan` passes
-(148 tests), this chapter's test binary was additionally run 20 times in a
-direct loop outside ctest, and the example binary itself ran directly
-under TSan, with zero `ThreadSanitizer` reports across all of it.
+passes, including this chapter's 29 new GoogleTests across routing, both
+trackers, both trial runners, and skew detection, with every prior
+chapter's tests still green. The ASan/UBSan lane builds clean, its own
+`ctest --preset asan-ubsan` passes, and the example binary runs clean
+under it. Because this chapter is concurrent by definition, the TSan lane
+was also built: `ctest --preset tsan` passes, this chapter's test binary
+was additionally run 20 times in a direct loop outside ctest, and the
+example binary itself ran directly under TSan, with zero
+`ThreadSanitizer` reports across all of it.
 `examples/08-shard-per-core/demo.sh` ran on an unprivileged, untuned
 development host and produced `results/shard-per-core.txt` with
 `sharded_vs_shared_lock_state_mismatch_count` at `0`; every number above

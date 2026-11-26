@@ -183,7 +183,7 @@ sync-inline's, because most parcels never touch anything slower than an
 atomic store. The tail is not free: the ring's high-water mark reached its
 full 4,095-slot capacity at least once, and a fraction of parcels paid a
 bounded wait for the consumer to catch up, though even that wait's p99.9
-(461.725 microseconds) sits under half of sync-inline's own p99 (920.049
+(461.725 microseconds) is about half of sync-inline's own p99 (920.049
 microseconds). Throughput tells the same story: off-path clears about
 76.0 times more parcels per second, batching turning 64 flushes into one.
 `offpath_vs_sync_mismatch_count` reads 0: the two lanes' audit files hold

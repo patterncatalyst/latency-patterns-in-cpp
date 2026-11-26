@@ -21,9 +21,9 @@ namespace ch09 {
 // still waits for the batch's completion before returning from
 // flush_batch() (a batch has to be durable before the consumer reports it
 // written), so this does not change what the consumer waits for; it changes
-// how the kernel is asked to do the write, one submission queue entry per
-// record in the batch instead of one syscall per record, reaped as
-// completions off one io_uring instance.
+// how the kernel is asked to do the write, one writev-shaped SQE per batch
+// instead of one blocking syscall per batch, reaped as a completion off one
+// io_uring instance.
 class IoUringBatchAuditWriter final : public BatchAuditWriter {
 public:
     explicit IoUringBatchAuditWriter(const std::filesystem::path& path, unsigned queue_depth = 256);

@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import ipaddress
 import re
 import subprocess
 import sys
@@ -67,6 +68,33 @@ def _load_scrub_module():
     return module
 
 
+# RFC 5737 documentation ranges: reserved for examples, identical in every
+# doc that uses them, so they name no machine.
+_DOCUMENTATION_NETS = (
+    ipaddress.ip_network("192.0.2.0/24"),
+    ipaddress.ip_network("198.51.100.0/24"),
+    ipaddress.ip_network("203.0.113.0/24"),
+)
+
+
+def _is_identifying_ipv4(candidate: str) -> bool:
+    """Gate-only exemption: loopback/unspecified/broadcast/doc addresses are
+    the same on every machine and name no host. scrub-host-ids.py's
+    --filter path stays broad on purpose (it scrubs captured logs); this
+    narrower check applies only to validate.py's authored-file gate."""
+    try:
+        addr = ipaddress.ip_address(candidate)
+    except ValueError:
+        return True  # not a classifiable address: fail safe, keep flagging
+    if addr.is_loopback or addr.is_unspecified:
+        return False
+    if candidate == "255.255.255.255":
+        return False
+    if any(addr in net for net in _DOCUMENTATION_NETS):
+        return False
+    return True
+
+
 def check_host_ids() -> tuple[bool, list[str]]:
     scrub = _load_scrub_module()
     table = scrub.build_table()
@@ -81,6 +109,15 @@ def check_host_ids() -> tuple[bool, list[str]]:
             continue
         rel = path.relative_to(REPO_ROOT)
         for description, is_regex, pattern, _replacement in table:
+            if description == "IPv4 address":
+                hits = [
+                    m.group(0)
+                    for m in re.finditer(pattern, text)
+                    if _is_identifying_ipv4(m.group(0))
+                ]
+                if hits:
+                    problems.append(f"{rel}: contains {description} ({hits[0]})")
+                continue
             found = re.search(pattern, text) if is_regex else (pattern in text)
             if found:
                 problems.append(f"{rel}: contains {description}")
