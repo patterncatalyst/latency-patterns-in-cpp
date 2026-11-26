@@ -39,6 +39,15 @@ class LatencyPatternsConan(ConanFile):
         # simulator and measurement harness.
         self.requires("spdlog/1.17.0")
 
+        # Ch9's off-path consumer's faster write path (see "Asynchronous
+        # processing"). Linux-only (io_uring is a Linux kernel interface);
+        # examples/09-async-processing/cpp/CMakeLists.txt find_package()s it
+        # QUIET and falls back to the epoll-driven blocking-writev baseline
+        # if it is unavailable, so this pin never blocks a build on a
+        # platform without it.
+        if self.settings.os == "Linux":
+            self.requires("liburing/2.15")
+
     def generate(self):
         # No cmake_layout: with `conan install . -of <dir>`, the toolchain
         # and dep configs land flat in <dir>/, where CMakePresets.json's

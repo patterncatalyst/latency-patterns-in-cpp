@@ -65,3 +65,10 @@ the same pin so `rustup` auto-selects it, in CI as well as on the host. See
 Filled in as each chapter ships, one block per chapter, naming every
 third-party library on that chapter's critical path and confirming its OSS
 license.
+
+### Ch9: Asynchronous processing
+
+| Dependency | Pin | License | Reason to hold (if any) |
+|---|---|---|---|
+| liburing (C++, Conan) | 2.15 | LGPL-2.1-or-later / MIT (dual) | surveyed 2026-11-25, upstream latest stable on conancenter; Linux-only, `find_package(liburing)` QUIET so a build without it falls back to the epoll-driven blocking-writev baseline (see CMakeLists.txt) |
+| smol (Rust) | =2.0.2 | Apache-2.0 / MIT (dual) | surveyed 2026-11-25, upstream latest stable on crates.io; the minimal composable async runtime (single-threaded executor + an `async-io` epoll-backed reactor), chosen over tokio because this chapter's lesson is the async model difference itself, not a feature-rich scheduler, and over a fully hand-rolled executor because `smol`'s `Timer`/`Async<File>`/`block_on` map 1:1 onto the C++ lane's timerfd/eventfd/epoll_wait, which is the comparison this chapter needs (see the chapter's "C++/Rust side-by-side") |

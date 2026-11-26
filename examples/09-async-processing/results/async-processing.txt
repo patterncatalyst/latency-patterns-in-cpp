@@ -1,0 +1,136 @@
+# Chapter 9 async-processing run: the scan-to-divert hot path's
+# audit/label write, measured synchronous-inline versus handed
+# off to a background event-loop consumer (epoll + batching +
+# a buffer pool + bounded backpressure), plus a dedicated small-
+# queue trial that forces real backpressure shedding, plus a
+# secondary benchmark of the background consumer's own batched
+# flush backend (blocking writev versus io_uring, if available).
+profile_label=ch09-async-processing
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+io_uring_available=1
+batch_capacity=64
+max_batch_delay_ms=5
+telemetry_otlp_enabled=0
+offpath_writer_backend=io_uring
+
+# --- lane 1: sync-inline (one O_DSYNC write per parcel, on the hot path) ---
+sync_item_count=20000
+sync_wall_time_us=9359643.318
+sync_throughput_items_per_sec=2136.8
+sync_shed_count=0
+sync_high_water_mark=0
+sync_sample_count=20000
+sync_p50_us=442.029
+sync_p99_us=920.049
+sync_p999_us=1516.785
+# sync completion-time histogram (microseconds since trial start, count, bar)
+   337.626 us -   1452.921 us | ######################################## 19978
+  1452.921 us -   2568.217 us |  9
+  2568.217 us -   3683.512 us |  0
+  3683.512 us -   4798.808 us |  0
+  4798.808 us -   5914.103 us |  0
+  5914.103 us -   7029.398 us |  12
+  7029.398 us -   8144.694 us |  0
+  8144.694 us -   9259.989 us |  0
+  9259.989 us -  10375.285 us |  0
+ 10375.285 us -  11490.580 us |  0
+ 11490.580 us -  12605.875 us |  0
+ 12605.875 us -  13721.171 us |  0
+ 13721.171 us -  14836.466 us |  0
+ 14836.466 us -  15951.762 us |  0
+ 15951.762 us -  17067.057 us |  0
+ 17067.057 us -  18182.352 us |  0
+ 18182.352 us -  19297.648 us |  0
+ 19297.648 us -  20412.943 us |  0
+ 20412.943 us -  21528.239 us |  0
+ 21528.239 us -  22643.534 us |  1
+sync_vs_input_mismatch_count=0
+sync_duplicate_count=0
+
+# --- lane 2: off-path (queue capacity 4095, batch 64, max_wait 5000us) ---
+offpath_item_count=20000
+offpath_wall_time_us=123207.481
+offpath_throughput_items_per_sec=162327.8
+offpath_shed_count=0
+offpath_high_water_mark=4095
+offpath_sample_count=20000
+offpath_p50_us=0.970
+offpath_p99_us=333.342
+offpath_p999_us=461.725
+# offpath completion-time histogram (microseconds since trial start, count, bar)
+     0.826 us -     61.272 us | ######################################## 19759
+    61.272 us -    121.717 us |  0
+   121.717 us -    182.163 us |  1
+   182.163 us -    242.608 us |  0
+   242.608 us -    303.054 us |  6
+   303.054 us -    363.500 us |  121
+   363.500 us -    423.945 us |  78
+   423.945 us -    484.391 us |  20
+   484.391 us -    544.836 us |  7
+   544.836 us -    605.282 us |  1
+   605.282 us -    665.728 us |  2
+   665.728 us -    726.173 us |  1
+   726.173 us -    786.619 us |  0
+   786.619 us -    847.064 us |  1
+   847.064 us -    907.510 us |  1
+   907.510 us -    967.956 us |  0
+   967.956 us -   1028.401 us |  0
+  1028.401 us -   1088.847 us |  1
+  1088.847 us -   1149.292 us |  0
+  1149.292 us -   1209.738 us |  1
+offpath_queue_capacity=4095
+offpath_vs_sync_mismatch_count=0
+offpath_duplicate_count=0
+
+# --- lane 3: backpressure demo (queue capacity 63, max_wait 50us) ---
+backpressure_item_count=20000
+backpressure_wall_time_us=163886.646
+backpressure_throughput_items_per_sec=122035.6
+backpressure_shed_count=1176
+backpressure_high_water_mark=63
+backpressure_sample_count=20000
+backpressure_p50_us=0.971
+backpressure_p99_us=106.043
+backpressure_p999_us=108.634
+# backpressure completion-time histogram (microseconds since trial start, count, bar)
+     0.830 us -      9.521 us | ######################################## 18498
+     9.521 us -     18.211 us |  69
+    18.211 us -     26.902 us |  27
+    26.902 us -     35.592 us |  36
+    35.592 us -     44.283 us |  30
+    44.283 us -     52.974 us |  30
+    52.974 us -     61.664 us |  33
+    61.664 us -     70.355 us |  33
+    70.355 us -     79.045 us |  30
+    79.045 us -     87.736 us |  37
+    87.736 us -     96.427 us |  38
+    96.427 us -    105.117 us | # 853
+   105.117 us -    113.808 us |  282
+   113.808 us -    122.498 us |  2
+   122.498 us -    131.189 us |  0
+   131.189 us -    139.880 us |  1
+   139.880 us -    148.570 us |  0
+   148.570 us -    157.261 us |  0
+   157.261 us -    165.951 us |  0
+   165.951 us -    174.642 us |  1
+backpressure_queue_capacity=63
+backpressure_delivered_count=18824
+backpressure_missing_from_audit_count=1176
+backpressure_duplicate_count=0
+
+# --- secondary benchmark: background consumer's own batched flush ---
+flush_benchmark_batch_count=2000
+flush_benchmark_batch_size=64
+flush_blocking_sample_count=2000
+flush_blocking_p50_us=443.431
+flush_blocking_p99_us=918.216
+flush_blocking_p999_us=6038.691
+flush_io_uring_sample_count=2000
+flush_io_uring_p50_us=453.322
+flush_io_uring_p99_us=868.489
+flush_io_uring_p999_us=1296.066

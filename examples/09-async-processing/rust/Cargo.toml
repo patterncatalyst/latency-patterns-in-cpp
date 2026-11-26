@@ -1,0 +1,42 @@
+# examples/09-async-processing/rust - the chapter's Rust lane: the identical
+# off-path hand-off as cpp/include/ch09/{bounded_handoff_queue,
+# event_loop_consumer}.hpp, built on Rust's async/await plus an executor
+# instead of C++23's event loop plus epoll (see rust-toolchain.toml,
+# scripts/bootstrap-rust.sh, scripts/rust-env.sh for the hermetic, pinned
+# toolchain this builds against; see CLAUDE.md, "The spine": Rust appears
+# only in Ch5, Ch6, Ch9 - this is the third and final lane).
+#
+# smol is pinned exactly (not a caret range): it is the minimal, composable
+# async runtime in the Rust ecosystem (a single-threaded block_on executor
+# plus an epoll-backed async-io reactor), not a feature-rich work-stealing
+# scheduler like tokio. Its Timer and the Executor's own readiness-driven
+# polling map directly onto the C++ lane's timerfd and epoll_wait, which is
+# exactly the comparison "the C++/Rust side-by-side" draws: both block on
+# "either new work or the batch deadline, whichever comes first," one
+# written by hand against raw file descriptors, one composed from two
+# futures and a runtime. Reaching for tokio here would answer a question
+# this chapter does not ask (which production async runtime to pick); smol
+# answers the question it does ask (what does an executor change about this
+# pattern).
+[package]
+name = "async-processing"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "ch09_async_processing"
+path = "src/lib.rs"
+
+[[bin]]
+name = "async_bench"
+path = "src/bin/async_bench.rs"
+
+[dependencies]
+smol = "=2.0.2"
+# O_DSYNC is not in std::fs; libc is the minimal, idiomatic way to reach it
+# (via OpenOptionsExt::custom_flags) rather than hardcoding the Linux-
+# specific flag value as a magic number. smol's own dependency tree already
+# pulls libc transitively; this is a direct, exact-pinned dependency because
+# ch09_async_processing's own code calls into it, not an incidental extra.
+libc = "=0.2.191"

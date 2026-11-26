@@ -1,0 +1,8 @@
+# Test code inherits the project .clang-tidy and relaxes checks that fight
+# GoogleTest idioms (see examples/00-running-example/cpp/tests/.clang-tidy
+# for the same rationale, duplicated per test directory since clang-tidy has
+# no include mechanism for its own config).
+InheritParentConfig: true
+Checks: >
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -readability-function-cognitive-complexity
