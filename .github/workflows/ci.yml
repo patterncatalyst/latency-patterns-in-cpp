@@ -38,9 +38,10 @@ jobs:
       - run: bundle exec jekyll build
 
   # examples/_rust-probe/ is the toolchain probe only; examples/05-wait-free-
-  # sync/rust/ and examples/06-exploiting-concurrency/rust/ are the real Rust
-  # lanes shipped so far (see CLAUDE.md, "The spine": Rust appears only in
-  # Ch5, Ch6, Ch9). Separate --manifest-path sets rather than a workspace:
+  # sync/rust/, examples/06-exploiting-concurrency/rust/, and
+  # examples/09-async-processing/rust/ are the three Rust lanes this repo
+  # ships (see CLAUDE.md, "The spine": Rust appears only in Ch5, Ch6, Ch9).
+  # Separate --manifest-path sets rather than a workspace:
   # each chapter's Rust lane stays a self-contained crate
   # under its own examples/NN-name/rust/, matching the C++ side's one-
   # directory-per-chapter layout, so a later chapter's crate is additive
@@ -62,6 +63,9 @@ jobs:
       - run: cargo fmt --manifest-path examples/06-exploiting-concurrency/rust/Cargo.toml --check
       - run: cargo clippy --manifest-path examples/06-exploiting-concurrency/rust/Cargo.toml --all-targets -- -D warnings
       - run: cargo test --manifest-path examples/06-exploiting-concurrency/rust/Cargo.toml
+      - run: cargo fmt --manifest-path examples/09-async-processing/rust/Cargo.toml --check
+      - run: cargo clippy --manifest-path examples/09-async-processing/rust/Cargo.toml --all-targets -- -D warnings
+      - run: cargo test --manifest-path examples/09-async-processing/rust/Cargo.toml
 
   # The one check the ruleset requires. Passes only when every job above
   # succeeded (none are conditionally skipped here, but the pattern matches

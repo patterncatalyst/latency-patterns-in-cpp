@@ -1,0 +1,44 @@
+# Chapter 9 Rust lane: the same off-path async handoff, built on
+# async/await plus the smol executor instead of C++23's event loop
+# plus epoll. Labelled as the same technique in Rust, not a
+# comparison against the C++ numbers (built in release mode, versus
+# the C++ Debug preset).
+profile_label=ch09-async-processing-rust
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+
+# --- lane 1: sync-inline (one O_DSYNC write per parcel, on the hot path) ---
+rust_sync_item_count=20000
+rust_sync_wall_time_us=9342604.817
+rust_sync_throughput_items_per_sec=2140.7
+rust_sync_sample_count=20000
+rust_sync_shed_count=0
+rust_sync_high_water_mark=0
+rust_sync_p50_us=440.430
+rust_sync_p99_us=950.558
+rust_sync_p999_us=1428.810
+
+# --- lane 2: off-path (queue capacity 4096, batch 64, max_wait 5000us) ---
+rust_offpath_item_count=20000
+rust_offpath_wall_time_us=128606.777
+rust_offpath_throughput_items_per_sec=155512.8
+rust_offpath_sample_count=20000
+rust_offpath_shed_count=0
+rust_offpath_high_water_mark=4096
+rust_offpath_p50_us=0.238
+rust_offpath_p99_us=452.025
+rust_offpath_p999_us=555.459
+
+# --- lane 3: backpressure demo (queue capacity 64, max_wait 50us) ---
+rust_backpressure_item_count=20000
+rust_backpressure_wall_time_us=149407.191
+rust_backpressure_sample_count=20000
+rust_backpressure_shed_count=2203
+rust_backpressure_high_water_mark=64
+rust_backpressure_p50_us=0.123
+rust_backpressure_p99_us=112.860
+rust_backpressure_p999_us=122.763

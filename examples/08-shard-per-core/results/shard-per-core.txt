@@ -1,0 +1,111 @@
+# Chapter 8 shard-per-core run: an in-flight parcel tracker keyed
+# by barcode, measured as one shared map behind one lock versus
+# shard-per-core (direct hash routing, no lock on the hot path),
+# then the same sharded design under induced hot-key skew before
+# and after rebalancing one colliding hot key onto an idle shard.
+profile_label=ch08-shard-per-core
+cpu_class=16-core/22-thread laptop CPU
+governor=powersave
+pinning=none
+isolation=none
+virt=bare-metal
+kernel=7.3
+shard_count=22
+
+# --- lane 1: shared-lock (one map, one mutex, 22 contending threads) ---
+shared_lock_item_count=400000
+shared_lock_wall_time_us=204907.360
+shared_lock_throughput_items_per_sec=1952101.7
+shared_lock_sample_count=400000
+shared_lock_p50_us=105059.337
+shared_lock_p99_us=202598.307
+shared_lock_p999_us=204651.035
+# shared_lock completion-time histogram (bucket range in microseconds since batch start, count, bar)
+   125.597 us -  10356.326 us | ################ 10583
+ 10356.326 us -  20587.055 us | ###################### 14432
+ 20587.055 us -  30817.784 us | ######################## 15705
+ 30817.784 us -  41048.512 us | ############################ 18178
+ 41048.512 us -  51279.241 us | ############################### 19794
+ 51279.241 us -  61509.970 us | ############################# 18755
+ 61509.970 us -  71740.699 us | ################################### 22612
+ 71740.699 us -  81971.428 us | ##################################### 23854
+ 81971.428 us -  92202.157 us | ###################################### 24425
+ 92202.157 us - 102432.885 us | ####################################### 25168
+102432.885 us - 112663.614 us | ######################################## 25370
+112663.614 us - 122894.343 us | ####################################### 25209
+122894.343 us - 133125.072 us | ################################## 21836
+133125.072 us - 143355.801 us | ############################## 19165
+143355.801 us - 153586.530 us | ################################ 20733
+153586.530 us - 163817.259 us | ############################# 18799
+163817.259 us - 174047.987 us | ################################# 21200
+174047.987 us - 184278.716 us | ########################### 17533
+184278.716 us - 194509.445 us | ############################# 18673
+194509.445 us - 204740.174 us | ############################ 17976
+
+# --- lane 2: shard-per-core (22 shards, direct hash routing, no lock) ---
+sharded_item_count=400000
+sharded_wall_time_us=24753.388
+sharded_throughput_items_per_sec=16159404.1
+sharded_sample_count=400000
+sharded_p50_us=21891.279
+sharded_p99_us=24224.703
+sharded_p999_us=24674.474
+# sharded completion-time histogram (bucket range in microseconds since batch start, count, bar)
+ 18832.965 us -  19128.152 us | ####### 6673
+ 19128.152 us -  19423.339 us | ############ 11198
+ 19423.339 us -  19718.525 us | ############## 13968
+ 19718.525 us -  20013.712 us | ################ 15504
+ 20013.712 us -  20308.899 us | ################# 16201
+ 20308.899 us -  20604.086 us | #################### 19015
+ 20604.086 us -  20899.273 us | ######################### 23757
+ 20899.273 us -  21194.459 us | ################################# 31109
+ 21194.459 us -  21489.646 us | ##################### 19870
+ 21489.646 us -  21784.833 us | ################################ 30672
+ 21784.833 us -  22080.020 us | #################################### 34248
+ 22080.020 us -  22375.207 us | ###################################### 36236
+ 22375.207 us -  22670.393 us | ######################################## 37286
+ 22670.393 us -  22965.580 us | ##################################### 34945
+ 22965.580 us -  23260.767 us | ###################### 21046
+ 23260.767 us -  23555.954 us | #################### 19520
+ 23555.954 us -  23851.141 us | ################ 15453
+ 23851.141 us -  24146.327 us | ######## 7750
+ 24146.327 us -  24441.514 us | ### 3694
+ 24441.514 us -  24736.701 us | # 1855
+sharded_vs_shared_lock_state_mismatch_count=0
+
+# --- lanes 3/4: induced hot-partition skew (2 colliding hot keys, 60% of traffic) ---
+skew_item_count=200000
+skew_hot_key_count=2
+skew_hot_fraction_percent=60.00
+skew_target_shard_index=3
+
+# before mitigation: both hot keys route to skew_before_hot_shard_index
+skew_before_hot_shard_index=2
+skew_before_hot_shard_processed_count=123365
+skew_before_hot_shard_load_percent=61.68
+skew_before_max_other_shard_processed_count=3841
+skew_before_hot_vs_max_other_ratio=32.12
+skew_before_hot_shard_sample_count=123365
+skew_before_hot_shard_p50_us=13319.483
+skew_before_hot_shard_p99_us=15815.677
+skew_before_hot_shard_p999_us=15860.200
+skew_before_other_shards_sample_count=76635
+skew_before_other_shards_p50_us=9111.968
+skew_before_other_shards_p99_us=10444.661
+skew_before_other_shards_p999_us=10547.163
+
+# after mitigation: hot_keys[1] moved to skew_target_shard_index
+skew_after_hot_shard_index=2
+skew_after_hot_shard_processed_count=63513
+skew_after_hot_shard_load_percent=31.76
+skew_after_max_other_shard_processed_count=63515
+skew_after_hot_vs_max_other_ratio=1.00
+skew_after_hot_shard_sample_count=63513
+skew_after_hot_shard_p50_us=10403.047
+skew_after_hot_shard_p99_us=11756.259
+skew_after_hot_shard_p999_us=11781.066
+skew_after_other_shards_sample_count=136487
+skew_after_other_shards_p50_us=9941.072
+skew_after_other_shards_p99_us=12423.352
+skew_after_other_shards_p999_us=12482.544
+skew_after_target_shard_processed_count=63515

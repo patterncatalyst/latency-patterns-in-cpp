@@ -1,0 +1,54 @@
+# examples/09-async-processing/observability/docker-compose.yml
+#
+# The off-path telemetry DESTINATION for this chapter's background
+# consumer, via lgtm-docker-stack's house pattern: the Grafana LGTM all-in-
+# one image (Grafana + Loki + Tempo + Mimir + Prometheus + an OpenTelemetry
+# Collector, one container). This chapter's consumer only ever emits two
+# metrics (ch09.batch_size, ch09.flush_duration_us), so only the OTLP/HTTP
+# receiver and Grafana's metrics view matter here; Loki and Tempo come
+# along for free in the same image and are simply unused.
+#
+# This stack is OPTIONAL and documentation-only: the chapter's measured C++
+# and Rust numbers (examples/09-async-processing/results/) are produced
+# entirely host-side, with no docker dependency (see CLAUDE.md, "Never
+# change the development host" and the chapter's "Off-path observability"
+# section). Bring this up only to see where the off-path telemetry would
+# land in a real deployment.
+#
+# Usage:
+#   docker compose -f examples/09-async-processing/observability/docker-compose.yml up -d
+#   export CH09_OTLP_ENDPOINT=127.0.0.1:4318
+#   examples/09-async-processing/demo.sh run   # or the rust bench
+#   open http://localhost:3000   # Grafana UI, anonymous admin access, dev only
+#   docker compose -f examples/09-async-processing/observability/docker-compose.yml down
+#
+# Requires the Docker Compose v2 CLI plugin (`docker compose`, not the
+# legacy `docker-compose` binary).
+
+services:
+  lgtm:
+    image: docker.io/grafana/otel-lgtm:0.9.3
+    container_name: ch09-lgtm
+    ports:
+      - "3000:3000"   # Grafana UI
+      - "4318:4318"   # OTLP HTTP — this chapter's TelemetrySink posts here
+    environment:
+      # Anonymous access keeps this one-chapter demo simple; never do this
+      # outside a throwaway local stack.
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    mem_limit: 1g
+    healthcheck:
+      # curl, not wget: this image does not ship wget (verified against
+      # grafana/otel-lgtm:0.9.3; a wget-based healthcheck reports permanently
+      # unhealthy here even once Grafana itself is up).
+      test: ["CMD", "curl", "-sf", "http://localhost:3000/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 60s
+
+networks:
+  default:
+    name: ch09-async-processing-observability
