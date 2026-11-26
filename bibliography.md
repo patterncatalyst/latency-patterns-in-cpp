@@ -14,3 +14,6 @@ line, in original C++23 (and, in three chapters, Rust).
 | Title | Author(s) | Publisher | Year | Focus |
 |---|---|---|---|---|
 | [*Latency: Reduce Delay in Software Systems*](https://www.manning.com/books/latency) | Pekka Enberg | Manning | 2025 | Latency technique catalog across the stack; regrouped here into one pattern per chapter, measured on a single host |
+| "SIEVE is Simpler than LRU: an Efficient Turn-Key Eviction Algorithm for Web Caches" | Yazhuo Zhang, Juncheng Yang, Yao Yue, Ymir Vigfusson, K. V. Rashmi | USENIX NSDI | 2024 | Source of the SIEVE eviction algorithm implemented in the caching chapter |
+| "An O(1) algorithm for implementing the LFU cache eviction scheme" | K. V. Shah, A. Mitra, D. Matani | self-published | 2010 | Source of the constant-time frequency-bucket LFU structure implemented in the caching chapter |
+| [*Designing Data-Intensive Applications*](https://www.oreilly.com/library/view/designing-data-intensive-applications/9781491903063/) | Martin Kleppmann | O'Reilly | 2017 | Caching, staleness, and materialized views in a multi-node context; reference for the caching chapter's distributed-caching v2 backlog |

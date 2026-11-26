@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 460" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8650a"/></marker></defs>
+<rect x="20" y="30" width="420" height="410" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="50" font-size="12" font-weight="700" fill="#888">cache in front of the slow table</text>
+<rect x="470" y="30" width="430" height="410" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="482" y="50" font-size="12" font-weight="700" fill="#888">SIEVE: a second chance, not a reorder</text>
+<rect x="60" y="70" width="160" height="55" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="140.0" y="95.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">Barcode</text>
+<text x="140.0" y="112.5" font-size="11.5" fill="#555555" text-anchor="middle">access</text>
+<rect x="60" y="165" width="160" height="55" rx="9" fill="#fff8ef" stroke="#e8870c" stroke-width="2"/>
+<text x="140.0" y="190.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">Cache</text>
+<text x="140.0" y="207.5" font-size="11.5" fill="#555555" text-anchor="middle">(fixed capacity)</text>
+<rect x="250" y="165" width="160" height="80" rx="9" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="330.0" y="195.5" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">RouteResolver</text>
+<text x="330.0" y="212.5" font-size="11.5" fill="#555555" text-anchor="middle">slow linear scan</text>
+<text x="330.0" y="227.5" font-size="11.5" fill="#555555" text-anchor="middle">(the backing lookup)</text>
+<rect x="140" y="310" width="200" height="60" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="240.0" y="338.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">Return route</text>
+<text x="240.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">to caller</text>
+<rect x="500" y="170" width="85" height="60" rx="9" fill="#ffffff" stroke="#999999" stroke-width="1.5"/>
+<text x="542.5" y="198.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">front</text>
+<text x="542.5" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">unvisited</text>
+<rect x="605" y="170" width="85" height="60" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="647.5" y="198.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">B</text>
+<text x="647.5" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">visited</text>
+<rect x="710" y="170" width="85" height="60" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="752.5" y="198.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">C</text>
+<text x="752.5" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">visited</text>
+<rect x="815" y="170" width="65" height="60" rx="9" fill="#ffffff" stroke="#999999" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="847.5" y="198.0" font-size="13.5" font-weight="700" fill="#111111" text-anchor="middle">A</text>
+<text x="847.5" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">back</text>
+<path d="M140,125 L140,165" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="146.0" y="139.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">lookup(barcode)</text>
+<text x="146.0" y="139.0" font-size="11" fill="#555" text-anchor="middle">lookup(barcode)</text>
+<path d="M220,192 L250,200" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="241.0" y="180.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">miss</text>
+<text x="241.0" y="180.0" font-size="11" fill="#555" text-anchor="middle">miss</text>
+<path d="M140,220 L190,310" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="145.0" y="259.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">hit</text>
+<text x="145.0" y="259.0" font-size="11" fill="#555" text-anchor="middle">hit</text>
+<path d="M330,245 L290,310" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="365.0" y="281.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">insert, then return</text>
+<text x="365.0" y="281.5" font-size="11" fill="#555" text-anchor="middle">insert, then return</text>
+<path d="M847,280 L847,230" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="872.0" y="260.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">hand</text>
+<text x="872.0" y="260.0" font-size="11" fill="#b8650a" text-anchor="middle">hand</text>
+<text x="500" y="155" font-size="12" fill="#64748b" text-anchor="start">new entries insert here, unvisited</text>
+<text x="685" y="260" font-size="13" fill="#888" text-anchor="middle">visited: bit clears, hand moves on</text>
+<text x="685" y="280" font-size="13" fill="#888" text-anchor="middle">(a second chance, not an eviction)</text>
+<text x="685" y="320" font-size="13" fill="#888" text-anchor="middle" font-weight="700">unvisited: this is the entry evicted</text>
+</svg>
